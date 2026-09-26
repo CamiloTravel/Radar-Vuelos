@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-26T15:30:30+00:00",
+ "actualizado": "2026-09-26T18:33:38+00:00",
  "rutas": {
   "BOG": {
    "nombre": "Bogotá",
@@ -15,7 +15,7 @@
    "nombre": "Cartagena",
    "radar_minimo": 857.0,
    "google_mejor": {
-    "precio": 1190.0,
+    "precio": 748.0,
     "salida": "2027-02-04",
     "regreso": "2027-02-18",
     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMDRgiA5qBRIDTUFEcgUSA0NURxodEgoyMDI3LTAyLTE4YIgOagUSA0NUR3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
@@ -25,50 +25,50 @@
    "nombre": "Berlín",
    "radar_minimo": 98.0,
    "google_mejor": {
-    "precio": 204.0,
-    "salida": "2026-12-17",
-    "regreso": "2026-12-20",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTdgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI2LTEyLTIwYJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 177.0,
+    "salida": "2026-12-29",
+    "regreso": "2027-01-01",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMjlgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI3LTAxLTAxYJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "MUC": {
    "nombre": "Múnich",
    "radar_minimo": 173.0,
    "google_mejor": {
-    "precio": 193.0,
-    "salida": "2026-12-01",
-    "regreso": "2026-12-04",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMDFg4ANqBRIDTUFEcgUSA01VQxodEgoyMDI2LTEyLTA0YOADagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 243.0,
+    "salida": "2026-11-06",
+    "regreso": "2026-11-09",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMDZg4ANqBRIDTUFEcgUSA01VQxodEgoyMDI2LTExLTA5YOADagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "ROM": {
    "nombre": "Roma",
    "radar_minimo": 56.0,
    "google_mejor": {
-    "precio": 72.0,
-    "salida": "2026-12-17",
-    "regreso": "2026-12-22",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTdgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTEyLTIyYMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 92.0,
+    "salida": "2027-02-04",
+    "regreso": "2027-02-07",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMDRgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI3LTAyLTA3YMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "BCN": {
    "nombre": "Barcelona",
    "radar_minimo": 88.0,
    "google_mejor": {
-    "precio": 92.0,
-    "salida": "2026-12-22",
-    "regreso": "2026-12-25",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMjJg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEyLTI1YPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 120.0,
+    "salida": "2027-01-13",
+    "regreso": "2027-01-17",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMTNg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI3LTAxLTE3YPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "AMS": {
    "nombre": "Ámsterdam",
    "radar_minimo": 145.0,
    "google_mejor": {
-    "precio": 170.0,
-    "salida": "2027-01-22",
+    "precio": 146.0,
+    "salida": "2027-01-23",
     "regreso": "2027-01-26",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjJgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI3LTAxLTI2YMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjNgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI3LTAxLTI2YMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "NYC": {
@@ -95,45 +95,50 @@
    "nombre": "Los Ángeles",
    "radar_minimo": 479.0,
    "google_mejor": {
-    "precio": 585.0,
-    "salida": "2027-01-11",
-    "regreso": "2027-01-31",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMTFghhJqBRIDTUFEcgUSA0xBWBodEgoyMDI3LTAxLTMxYIYSagUSA0xBWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 600.0,
+    "salida": "2026-11-19",
+    "regreso": "2026-12-08",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMTlghhJqBRIDTUFEcgUSA0xBWBodEgoyMDI2LTEyLTA4YIYSagUSA0xBWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "CHI": {
    "nombre": "Chicago",
    "radar_minimo": null,
    "google_mejor": {
-    "precio": 449.0,
-    "salida": "2027-01-16",
-    "regreso": "2027-02-03",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMTZgrg1qBRIDTUFEcgUSA09SRBodEgoyMDI3LTAyLTAzYK4NagUSA09SRHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 457.0,
+    "salida": "2027-01-27",
+    "regreso": "2027-02-17",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjdgrg1qBRIDTUFEcgUSA09SRBodEgoyMDI3LTAyLTE3YK4NagUSA09SRHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "BOS": {
    "nombre": "Boston",
    "radar_minimo": null,
    "google_mejor": {
-    "precio": 435.0,
-    "salida": "2027-01-21",
-    "regreso": "2027-02-08",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjFgggtqBRIDTUFEcgUSA0JPUxodEgoyMDI3LTAyLTA4YIILagUSA0JPU3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 407.0,
+    "salida": "2027-02-01",
+    "regreso": "2027-02-17",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMDFgggtqBRIDTUFEcgUSA0JPUxodEgoyMDI3LTAyLTE3YIILagUSA0JPU3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   },
   "ORL": {
    "nombre": "Orlando",
    "radar_minimo": null,
-   "google_mejor": null
+   "google_mejor": {
+    "precio": 646.0,
+    "salida": "2027-02-17",
+    "regreso": "2027-03-03",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMTdgkA1qBRIDTUFEcgUSA01DTxodEgoyMDI3LTAzLTAzYJANagUSA01DT3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
+   }
   },
   "SFO": {
    "nombre": "San Francisco",
    "radar_minimo": 605.0,
    "google_mejor": {
-    "precio": 603.0,
-    "salida": "2027-01-20",
-    "regreso": "2027-02-03",
-    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjBgyhFqBRIDTUFEcgUSA1NGTxodEgoyMDI3LTAyLTAzYMoRagUSA1NGT3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
+    "precio": 557.0,
+    "salida": "2027-02-11",
+    "regreso": "2027-03-03",
+    "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMTFgyhFqBRIDTUFEcgUSA1NGTxodEgoyMDI3LTAzLTAzYMoRagUSA1NGT3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=en-US&curr=EUR"
    }
   }
  },
@@ -174,12 +179,6 @@
    "salida": "2026-12-16",
    "regreso": "2026-12-20"
   },
-  "LIS": {
-   "nombre": "Lisbon",
-   "precio": 59.0,
-   "salida": "2026-11-07",
-   "regreso": "2026-11-12"
-  },
   "CUN": {
    "nombre": "Cancun",
    "precio": 720.0,
@@ -206,7 +205,7 @@
   },
   "AHO": {
    "nombre": "Alghero",
-   "precio": 34.0,
+   "precio": 35.0,
    "salida": "2026-10-19",
    "regreso": "2026-10-22"
   },
@@ -263,6 +262,12 @@
    "precio": 60.0,
    "salida": "2026-10-31",
    "regreso": "2026-11-03"
+  },
+  "LIS": {
+   "nombre": "Lisbon",
+   "precio": 59.0,
+   "salida": "2026-11-07",
+   "regreso": "2026-11-12"
   },
   "TCI": {
    "nombre": "Tenerife",
@@ -336,17 +341,17 @@
    "salida": "2026-11-12",
    "regreso": "2026-11-15"
   },
+  "KRK": {
+   "nombre": "Krakow",
+   "precio": 86.0,
+   "salida": "2026-12-16",
+   "regreso": "2026-12-19"
+  },
   "RMO": {
    "nombre": "Chisinau",
    "precio": 111.0,
    "salida": "2026-11-04",
    "regreso": "2026-11-09"
-  },
-  "KRK": {
-   "nombre": "Krakow",
-   "precio": 99.0,
-   "salida": "2026-12-09",
-   "regreso": "2026-12-13"
   },
   "LCA": {
    "nombre": "Larnaca",
@@ -398,7 +403,7 @@
   },
   "CCS": {
    "nombre": "Caracas",
-   "precio": 494.0,
+   "precio": 526.0,
    "salida": "2027-03-09",
    "regreso": "2027-03-28"
   },
@@ -419,6 +424,12 @@
    "precio": 915.0,
    "salida": "2026-10-26",
    "regreso": "2026-11-10"
+  },
+  "SCL": {
+   "nombre": "Santiago",
+   "precio": 828.0,
+   "salida": "2027-02-02",
+   "regreso": "2027-02-17"
   },
   "CLO": {
    "nombre": "Cali",
@@ -536,9 +547,9 @@
   },
   "RIO": {
    "nombre": "Rio de Janeiro",
-   "precio": 711.0,
-   "salida": "2027-03-07",
-   "regreso": "2027-03-21"
+   "precio": 716.0,
+   "salida": "2027-03-29",
+   "regreso": "2027-04-19"
   },
   "SJO": {
    "nombre": "San Jose",
@@ -659,12 +670,6 @@
    "precio": 644.0,
    "salida": "2027-01-28",
    "regreso": "2027-02-13"
-  },
-  "SCL": {
-   "nombre": "Santiago",
-   "precio": 828.0,
-   "salida": "2027-02-02",
-   "regreso": "2027-02-17"
   },
   "SSA": {
    "nombre": "Salvador",
