@@ -1,0 +1,47 @@
+name: Bot de Telegram
+ 
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # revisa tus mensajes cada ~5 minutos
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+ 
+concurrency:
+  group: bot-telegram
+  cancel-in-progress: false
+ 
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+ 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+ 
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+ 
+      - name: Responder mensajes
+        env:
+          TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python bot.py
+ 
+      - name: Guardar cambios
+        if: always()
+        run: |
+          git config user.name "radar-bot"
+          git config user.email "radar-bot@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet && exit 0
+          git commit -m "Bot: ajustes $(date -u +'%Y-%m-%d %H:%M') UTC"
+          for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
+          exit 1
+ 
