@@ -73,9 +73,48 @@ def log(msg):
 # ------------------------------------------------------------------
 # Utilidades generales
 # ------------------------------------------------------------------
-def load_config():
+AJUSTES_FILE = DATA / "ajustes_bot.json"   # Cambios hechos desde Telegram
+
+
+def load_overrides():
+    if AJUSTES_FILE.exists():
+        try:
+            return json.loads(AJUSTES_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+def apply_overrides(cfg, ov):
+    """Aplica encima de config.yaml los cambios hechos desde Telegram."""
+    removed = set(ov.get("quitadas", []))
+    routes = [dict(r) for r in cfg.get("rutas", []) if r["id"] not in removed]
+    ids = {r["id"] for r in routes}
+    routes += [dict(r) for r in ov.get("rutas_extra", []) if r["id"] not in ids and r["id"] not in removed]
+    for r in routes:
+        if r["id"] in ov.get("objetivos", {}):
+            r["precio_objetivo"] = ov["objetivos"][r["id"]]
+        if r["id"] in ov.get("prioridades", {}):
+            r["prioridad"] = ov["prioridades"][r["id"]]
+    cfg["rutas"] = routes
+    cfg["_pausa_hasta"] = ov.get("pausa_hasta")
+    return cfg
+
+
+def load_config(raw=False):
     with open(BASE / "config.yaml", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        cfg = yaml.safe_load(f)
+    return cfg if raw else apply_overrides(cfg, load_overrides())
+
+
+def paused_until(cfg):
+    p = cfg.get("_pausa_hasta")
+    try:
+        if p and datetime.fromisoformat(p) > NOW_UTC:
+            return datetime.fromisoformat(p)
+    except Exception:
+        pass
+    return None
 
 
 def load_state():
@@ -461,6 +500,43 @@ def build_message(a, cfg):
     return "\n".join(lines)
 
 
+def summary_text(cfg, extra_rows=None, gf_index=None, titulo=None):
+    """Mejores precios de las últimas 24 h por ruta (usado en el resumen y en /resumen)."""
+    windows = cfg["ventanas"]
+    cfg_a = cfg["alertas"]
+    routes = cfg.get("rutas", [])
+    if gf_index is None:
+        gf_index = build_gf_index(read_csv(GF_FILE, cfg_a["dias_historial"]), windows)
+    recent = read_csv(GF_FILE, 1) + (extra_rows or [])
+    lines = [titulo or f"☀️ <b>Resumen diario</b> · {fdate(TODAY)}"]
+    for tier_name, tier in (("Prioritarias", "alta"), ("Secundarias", "media")):
+        tier_routes = [r for r in routes if r.get("prioridad", "media") == tier]
+        if not tier_routes:
+            continue
+        lines.append(f"\n<b>{tier_name}</b>")
+        for route in tier_routes:
+            rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]]
+            if not rows:
+                lines.append(f"• {html.escape(route['nombre'])}: sin datos hoy")
+                continue
+            b = min(rows, key=lambda r: float(r["precio"]))
+            d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
+            wid = window_of(d1, windows)
+            wtxt = f" · {windows[wid]['nombre']}" if wid else ""
+            tgt = f" 🎯{euros(float(route['precio_objetivo']))}" if route.get("precio_objetivo") else ""
+            lines.append(f"• {html.escape(route['nombre'])}: <b>{euros(float(b['precio']))}</b> "
+                         f"({fdate(d1)} → {fdate(d2)}{wtxt}){tgt}")
+    learned = sum(1 for r in routes for wid in windows
+                  if sum(1 for t, _, _ in gf_index.get((r["id"], wid), []) if t == "candidato")
+                  >= cfg_a["min_observaciones"])
+    lines.append(f"\n🧠 Precio normal aprendido: {learned}/{len(routes) * len(windows)} combinaciones ruta-ventana")
+    p = paused_until(cfg)
+    if p:
+        lines.append(f"⏸ Alertas en pausa hasta el {fdate(p.astimezone(MADRID).date())}")
+    lines.append("Precios más bajos vistos en las últimas 24 h, con tu equipaje incluido.")
+    return "\n".join(lines)
+
+
 # ------------------------------------------------------------------
 # Programa principal
 # ------------------------------------------------------------------
@@ -521,7 +597,11 @@ def main():
     months = months_between(TODAY + timedelta(days=min_lead), TODAY + timedelta(days=max_lead))
 
     # ---------- utilidades internas ----------
+    paused = paused_until(cfg)
+
     def register(alert):
+        if paused:
+            return
         k = f"{alert['clave']}|{alert['salida']}|{alert['regreso']}"
         prev = sent.get(k)
         if prev and alert["precio"] > prev["precio"] * (1 - cfg_a["realertar_si_baja"]):
@@ -808,34 +888,17 @@ def main():
     # ---------- 6. Resumen diario ----------
     hour = cfg_a.get("resumen_diario_hora")
     if hour is not None and NOW_MADRID.hour >= int(hour) and state.get("ultimo_resumen") != TODAY.isoformat():
-        recent = read_csv(GF_FILE, 1) + gf_rows
-        lines = [f"☀️ <b>Resumen diario</b> · {fdate(TODAY)}"]
-        for tier_name, tier in (("Prioritarias", "alta"), ("Secundarias", "media")):
-            lines.append(f"\n<b>{tier_name}</b>")
-            for route in [r for r in routes if r.get("prioridad", "media") == tier]:
-                rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]]
-                if not rows:
-                    lines.append(f"• {html.escape(route['nombre'])}: sin datos hoy")
-                    continue
-                b = min(rows, key=lambda r: float(r["precio"]))
-                d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
-                wid = window_of(d1, windows)
-                wtxt = f" · {windows[wid]['nombre']}" if wid else ""
-                lines.append(f"• {html.escape(route['nombre'])}: <b>{euros(float(b['precio']))}</b> "
-                             f"({fdate(d1)} → {fdate(d2)}{wtxt})")
-        learned = sum(1 for r in routes for wid in windows
-                      if sum(1 for t, _, _ in gf_index.get((r["id"], wid), []) if t == "candidato")
-                      >= cfg_a["min_observaciones"])
-        total = len(routes) * len(windows)
-        lines.append(f"\n🧠 Precio normal aprendido: {learned}/{total} combinaciones ruta-ventana")
+        text = summary_text(cfg, gf_rows, gf_index)
         total_g = stats["google_ok"] + stats["google_fail"]
         if total_g and stats["google_fail"] / total_g > 0.5:
-            lines.append("⚠️ Google Flights está fallando en muchas consultas. Avísale a Claude.")
+            text += "\n⚠️ Google Flights está fallando en muchas consultas. Avísale a Claude."
         if not TP_TOKEN:
-            lines.append("⚠️ Falta el secreto TRAVELPAYOUTS_TOKEN.")
-        lines.append("Precios más bajos vistos en las últimas 24 h, con tu equipaje incluido.")
-        if telegram("\n".join(lines)):
+            text += "\n⚠️ Falta el secreto TRAVELPAYOUTS_TOKEN."
+        if telegram(text):
             state["ultimo_resumen"] = TODAY.isoformat()
+
+    state["ultima_ejecucion"] = {"fecha": NOW_ISO, "google_ok": stats["google_ok"],
+                                 "google_fallos": stats["google_fail"], "alertas": stats["alertas"]}
 
     # ---------- 7. Guardar ----------
     append_csv(TP_FILE, TP_FIELDS, tp_rows)
