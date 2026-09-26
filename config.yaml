@@ -1,74 +1,109 @@
 # ============================================================
-#  RADAR DE VUELOS — CONFIGURACIÓN
+#  RADAR DE VUELOS v2 — CONFIGURACIÓN
 #  Este es el único archivo que necesitas tocar para ajustar
 #  el sistema. Las líneas que empiezan por # son comentarios.
 # ============================================================
 
 origen:
-  codigo_ciudad: MAD      # Código de ciudad (para el radar)
-  aeropuerto: MAD         # Código de aeropuerto (para Google Flights)
+  codigo_ciudad: MAD
+  aeropuerto: MAD
 
-horizonte_meses: 6        # Buscar vuelos que salgan en los próximos X meses
+# ------------------------------------------------------------
+# VENTANAS DE ANTELACIÓN
+#  Cada ventana tiene su propio "precio normal".
+#  cada_horas: cada cuánto se revisa (múltiplo de 3)
+#  tolerancia_dias: para calcular el precio normal se comparan
+#  fechas con una antelación parecida (± estos días)
+ventanas:
+  ultimo_minuto: {nombre: "Último minuto", desde_dias: 1,   hasta_dias: 14,  cada_horas: 3,  tolerancia_dias: 3}
+  corto:         {nombre: "Corto plazo",   desde_dias: 15,  hasta_dias: 60,  cada_horas: 3,  tolerancia_dias: 10}
+  medio:         {nombre: "Medio plazo",   desde_dias: 61,  hasta_dias: 180, cada_horas: 6,  tolerancia_dias: 25}
+  largo:         {nombre: "Largo plazo",   desde_dias: 181, hasta_dias: 365, cada_horas: 12, tolerancia_dias: 45}
 
-# Perfiles de viaje: estancia y equipaje que se incluyen en el precio
+# ------------------------------------------------------------
+# PERFILES DE VIAJE
+#  factor_duracion: máximo X veces la duración del vuelo directo
+#  fin_de_semana: prioriza salir viernes y volver lunes
+# ------------------------------------------------------------
 perfiles:
   europa:
     estancia_dias: [3, 5]
-    equipaje_mano: 1        # 1 maleta de cabina (10 kg)
+    equipaje_mano: 1          # maleta de cabina 10 kg
     equipaje_facturado: 0
+    factor_duracion: 3
+    fin_de_semana: true
   largo:
     estancia_dias: [14, 21]
     equipaje_mano: 1
-    equipaje_facturado: 1   # 1 maleta facturada (23 kg)
+    equipaje_facturado: 1     # maleta de 23 kg
+    factor_duracion: 2
+    fin_de_semana: false
 
-# Regla de duración: el viaje con escalas no puede superar
-# X veces la duración del vuelo directo
-factor_duracion_maxima: 3
-
-# Evitar billetes separados / autotransbordo (tendrías que recoger
-# y volver a facturar la maleta tú mismo entre vuelos)
+# Evitar billetes separados / autotransbordo
 ocultar_autotransbordo: true
 
+# Aerolíneas preferidas: suman puntos, pero no se descartan las demás
+aerolineas_preferidas:
+  - Iberia
+  - American
+  - Qatar
+  - Qantas
+  - Finnair
+  - British Airways
+  - Lufthansa
+  - Air France
+
+# ------------------------------------------------------------
+# ALERTAS
+# ------------------------------------------------------------
 alertas:
-  umbral_chollo: 0.25          # Avisar si está un 25% o más por debajo de lo normal
-  umbral_error_fare: 0.50      # "Error fare" si está un 50% o más por debajo
-  dias_historial: 60           # Días de historial para calcular el precio normal
-  min_observaciones_mes: 15    # Datos mínimos para usar el precio normal de ese mes
-  min_observaciones_ruta: 30   # Datos mínimos para usar el precio normal de la ruta
-  realertar_si_baja: 0.05      # Repetir aviso del mismo vuelo solo si baja otro 5%
-  resumen_diario_hora: 9       # Hora (Madrid) del resumen diario. Pon null para desactivarlo
+  umbral_chollo: 0.25            # Mínimo 25% por debajo de lo normal
+  umbral_error_fare: 0.50        # 50% o más: error fare (llega siempre)
+  puntuacion_minima: 60          # Puntuación mínima (0-100) para avisar
+  exigencia_extra_entre_semana: 8  # Puntos extra exigidos si no es viernes→lunes
+  dias_historial: 60
+  min_observaciones: 15          # Datos mínimos antes de juzgar si algo es un chollo
+  realertar_si_baja: 0.05          # Repetir aviso de las mismas fechas solo si bajan otro 5%
+  mejora_minima_para_repetir: 0.10 # Máx. 1 aviso por ruta cada 24 h, salvo que mejore un 10%
+  silencio: {desde: 1, hasta: 7}   # Horas de Madrid sin alertas (salvo error fares)
+  resumen_diario_hora: 9
 
 google:
   activado: true
-  max_consultas_por_ejecucion: 70
-  candidatos_por_ruta: 3       # Fechas más baratas del radar que se verifican
-  muestras_por_ruta: 2         # Fechas aleatorias para aprender el precio normal
+  max_consultas_por_ejecucion: 90
 
 # ------------------------------------------------------------
-# RUTAS FIJAS (ida y vuelta desde Madrid)
+# RUTAS (ida y vuelta desde Madrid)
+#  prioridad: alta (más búsquedas) o media
 #  duracion_directo_min: duración aproximada del vuelo directo
-#  precio_objetivo: avísame si baja de este precio (null = sin objetivo)
+#  precio_objetivo: avísame si baja de este precio (null = ninguno)
 # ------------------------------------------------------------
 rutas:
-  - {id: BOG, nombre: Bogotá,        codigo_ciudad: BOG, aeropuerto: BOG, perfil: largo,  duracion_directo_min: 650, precio_objetivo: 700}
-  - {id: CTG, nombre: Cartagena,     codigo_ciudad: CTG, aeropuerto: CTG, perfil: largo,  duracion_directo_min: 600, precio_objetivo: null}
-  - {id: BER, nombre: Berlín,        codigo_ciudad: BER, aeropuerto: BER, perfil: europa, duracion_directo_min: 180, precio_objetivo: null}
-  - {id: MUC, nombre: Múnich,        codigo_ciudad: MUC, aeropuerto: MUC, perfil: europa, duracion_directo_min: 160, precio_objetivo: null}
-  - {id: ROM, nombre: Roma,          codigo_ciudad: ROM, aeropuerto: FCO, perfil: europa, duracion_directo_min: 150, precio_objetivo: null}
-  - {id: BCN, nombre: Barcelona,     codigo_ciudad: BCN, aeropuerto: BCN, perfil: europa, duracion_directo_min: 80,  precio_objetivo: null}
-  - {id: AMS, nombre: Ámsterdam,     codigo_ciudad: AMS, aeropuerto: AMS, perfil: europa, duracion_directo_min: 150, precio_objetivo: null}
-  - {id: NYC, nombre: Nueva York,    codigo_ciudad: NYC, aeropuerto: JFK, perfil: largo,  duracion_directo_min: 480, precio_objetivo: null}
-  - {id: MIA, nombre: Miami,         codigo_ciudad: MIA, aeropuerto: MIA, perfil: largo,  duracion_directo_min: 540, precio_objetivo: null}
-  - {id: LAX, nombre: Los Ángeles,   codigo_ciudad: LAX, aeropuerto: LAX, perfil: largo,  duracion_directo_min: 770, precio_objetivo: null}
-  - {id: CHI, nombre: Chicago,       codigo_ciudad: CHI, aeropuerto: ORD, perfil: largo,  duracion_directo_min: 570, precio_objetivo: null}
-  - {id: BOS, nombre: Boston,        codigo_ciudad: BOS, aeropuerto: BOS, perfil: largo,  duracion_directo_min: 470, precio_objetivo: null}
-  - {id: ORL, nombre: Orlando,       codigo_ciudad: ORL, aeropuerto: MCO, perfil: largo,  duracion_directo_min: 560, precio_objetivo: null}
-  - {id: SFO, nombre: San Francisco, codigo_ciudad: SFO, aeropuerto: SFO, perfil: largo,  duracion_directo_min: 750, precio_objetivo: null}
+  # --- Prioritarias ---
+  - {id: BER, nombre: Berlín,           codigo_ciudad: BER, aeropuerto: BER, perfil: europa, prioridad: alta,  duracion_directo_min: 180, precio_objetivo: null}
+  - {id: MUC, nombre: Múnich,           codigo_ciudad: MUC, aeropuerto: MUC, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
+  - {id: BCN, nombre: Barcelona,        codigo_ciudad: BCN, aeropuerto: BCN, perfil: europa, prioridad: alta,  duracion_directo_min: 80,  precio_objetivo: null}
+  - {id: IBZ, nombre: Ibiza,            codigo_ciudad: IBZ, aeropuerto: IBZ, perfil: europa, prioridad: alta,  duracion_directo_min: 70,  precio_objetivo: null}
+  - {id: AMS, nombre: Ámsterdam,        codigo_ciudad: AMS, aeropuerto: AMS, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
+  - {id: LIS, nombre: Lisboa,           codigo_ciudad: LIS, aeropuerto: LIS, perfil: europa, prioridad: alta,  duracion_directo_min: 75,  precio_objetivo: null}
+  - {id: ROM, nombre: Roma,             codigo_ciudad: ROM, aeropuerto: FCO, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
+  - {id: BOG, nombre: Bogotá,           codigo_ciudad: BOG, aeropuerto: BOG, perfil: largo,  prioridad: alta,  duracion_directo_min: 570, precio_objetivo: 670}
+  - {id: MIA, nombre: Miami,            codigo_ciudad: MIA, aeropuerto: MIA, perfil: largo,  prioridad: alta,  duracion_directo_min: 450, precio_objetivo: null}
+  - {id: MEX, nombre: Ciudad de México, codigo_ciudad: MEX, aeropuerto: MEX, perfil: largo,  prioridad: alta,  duracion_directo_min: 720, precio_objetivo: null}
+  # --- Secundarias ---
+  - {id: NYC, nombre: Nueva York,       codigo_ciudad: NYC, aeropuerto: JFK, perfil: largo,  prioridad: media, duracion_directo_min: 480, precio_objetivo: null}
+  - {id: DUB, nombre: Dublín,           codigo_ciudad: DUB, aeropuerto: DUB, perfil: europa, prioridad: media, duracion_directo_min: 150, precio_objetivo: null}
+  - {id: BUD, nombre: Budapest,         codigo_ciudad: BUD, aeropuerto: BUD, perfil: europa, prioridad: media, duracion_directo_min: 185, precio_objetivo: null}
+  - {id: KRK, nombre: Cracovia,         codigo_ciudad: KRK, aeropuerto: KRK, perfil: europa, prioridad: media, duracion_directo_min: 190, precio_objetivo: null}
+  - {id: SPU, nombre: Hvar (vía Split), codigo_ciudad: SPU, aeropuerto: SPU, perfil: europa, prioridad: media, duracion_directo_min: 165, precio_objetivo: null}
+  - {id: JMK, nombre: Mykonos,          codigo_ciudad: JMK, aeropuerto: JMK, perfil: europa, prioridad: media, duracion_directo_min: 240, precio_objetivo: null}
+  - {id: BUH, nombre: Bucarest,         codigo_ciudad: BUH, aeropuerto: OTP, perfil: europa, prioridad: media, duracion_directo_min: 225, precio_objetivo: null}
 
 # ------------------------------------------------------------
-# EXPLORACIÓN: Madrid a cualquier destino de estas regiones
+# EXPLORACIÓN: Madrid a cualquier otro destino de estas regiones
 # ------------------------------------------------------------
 exploracion:
   activada: true
   regiones: [europa, latam]
-  verificar_en_google: true    # Confirmar los chollos detectados con Google Flights
+  umbral_chollo: 0.35          # Más exigente que en tus rutas fijas
+  verificar_en_google: true
