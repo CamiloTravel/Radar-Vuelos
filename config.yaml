@@ -1,0 +1,74 @@
+# ============================================================
+#  RADAR DE VUELOS — CONFIGURACIÓN
+#  Este es el único archivo que necesitas tocar para ajustar
+#  el sistema. Las líneas que empiezan por # son comentarios.
+# ============================================================
+
+origen:
+  codigo_ciudad: MAD      # Código de ciudad (para el radar)
+  aeropuerto: MAD         # Código de aeropuerto (para Google Flights)
+
+horizonte_meses: 6        # Buscar vuelos que salgan en los próximos X meses
+
+# Perfiles de viaje: estancia y equipaje que se incluyen en el precio
+perfiles:
+  europa:
+    estancia_dias: [3, 5]
+    equipaje_mano: 1        # 1 maleta de cabina (10 kg)
+    equipaje_facturado: 0
+  largo:
+    estancia_dias: [14, 21]
+    equipaje_mano: 1
+    equipaje_facturado: 1   # 1 maleta facturada (23 kg)
+
+# Regla de duración: el viaje con escalas no puede superar
+# X veces la duración del vuelo directo
+factor_duracion_maxima: 3
+
+# Evitar billetes separados / autotransbordo (tendrías que recoger
+# y volver a facturar la maleta tú mismo entre vuelos)
+ocultar_autotransbordo: true
+
+alertas:
+  umbral_chollo: 0.25          # Avisar si está un 25% o más por debajo de lo normal
+  umbral_error_fare: 0.50      # "Error fare" si está un 50% o más por debajo
+  dias_historial: 60           # Días de historial para calcular el precio normal
+  min_observaciones_mes: 15    # Datos mínimos para usar el precio normal de ese mes
+  min_observaciones_ruta: 30   # Datos mínimos para usar el precio normal de la ruta
+  realertar_si_baja: 0.05      # Repetir aviso del mismo vuelo solo si baja otro 5%
+  resumen_diario_hora: 9       # Hora (Madrid) del resumen diario. Pon null para desactivarlo
+
+google:
+  activado: true
+  max_consultas_por_ejecucion: 70
+  candidatos_por_ruta: 3       # Fechas más baratas del radar que se verifican
+  muestras_por_ruta: 2         # Fechas aleatorias para aprender el precio normal
+
+# ------------------------------------------------------------
+# RUTAS FIJAS (ida y vuelta desde Madrid)
+#  duracion_directo_min: duración aproximada del vuelo directo
+#  precio_objetivo: avísame si baja de este precio (null = sin objetivo)
+# ------------------------------------------------------------
+rutas:
+  - {id: BOG, nombre: Bogotá,        codigo_ciudad: BOG, aeropuerto: BOG, perfil: largo,  duracion_directo_min: 650, precio_objetivo: 700}
+  - {id: CTG, nombre: Cartagena,     codigo_ciudad: CTG, aeropuerto: CTG, perfil: largo,  duracion_directo_min: 600, precio_objetivo: null}
+  - {id: BER, nombre: Berlín,        codigo_ciudad: BER, aeropuerto: BER, perfil: europa, duracion_directo_min: 180, precio_objetivo: null}
+  - {id: MUC, nombre: Múnich,        codigo_ciudad: MUC, aeropuerto: MUC, perfil: europa, duracion_directo_min: 160, precio_objetivo: null}
+  - {id: ROM, nombre: Roma,          codigo_ciudad: ROM, aeropuerto: FCO, perfil: europa, duracion_directo_min: 150, precio_objetivo: null}
+  - {id: BCN, nombre: Barcelona,     codigo_ciudad: BCN, aeropuerto: BCN, perfil: europa, duracion_directo_min: 80,  precio_objetivo: null}
+  - {id: AMS, nombre: Ámsterdam,     codigo_ciudad: AMS, aeropuerto: AMS, perfil: europa, duracion_directo_min: 150, precio_objetivo: null}
+  - {id: NYC, nombre: Nueva York,    codigo_ciudad: NYC, aeropuerto: JFK, perfil: largo,  duracion_directo_min: 480, precio_objetivo: null}
+  - {id: MIA, nombre: Miami,         codigo_ciudad: MIA, aeropuerto: MIA, perfil: largo,  duracion_directo_min: 540, precio_objetivo: null}
+  - {id: LAX, nombre: Los Ángeles,   codigo_ciudad: LAX, aeropuerto: LAX, perfil: largo,  duracion_directo_min: 770, precio_objetivo: null}
+  - {id: CHI, nombre: Chicago,       codigo_ciudad: CHI, aeropuerto: ORD, perfil: largo,  duracion_directo_min: 570, precio_objetivo: null}
+  - {id: BOS, nombre: Boston,        codigo_ciudad: BOS, aeropuerto: BOS, perfil: largo,  duracion_directo_min: 470, precio_objetivo: null}
+  - {id: ORL, nombre: Orlando,       codigo_ciudad: ORL, aeropuerto: MCO, perfil: largo,  duracion_directo_min: 560, precio_objetivo: null}
+  - {id: SFO, nombre: San Francisco, codigo_ciudad: SFO, aeropuerto: SFO, perfil: largo,  duracion_directo_min: 750, precio_objetivo: null}
+
+# ------------------------------------------------------------
+# EXPLORACIÓN: Madrid a cualquier destino de estas regiones
+# ------------------------------------------------------------
+exploracion:
+  activada: true
+  regiones: [europa, latam]
+  verificar_en_google: true    # Confirmar los chollos detectados con Google Flights
