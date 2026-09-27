@@ -1,5 +1,5 @@
 {
- "ejecuciones": 12,
+ "ejecuciones": 13,
  "alertas_enviadas": {},
  "inicializado": true,
  "ultimo_resumen": "2026-09-27",
@@ -7,9 +7,9 @@
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-09-27T12:35:53+00:00",
-  "google_ok": 90,
-  "google_fallos": 0,
+  "fecha": "2026-09-27T14:34:09+00:00",
+  "google_ok": 87,
+  "google_fallos": 3,
   "alertas": 0
  }
 }
