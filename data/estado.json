@@ -1,14 +1,14 @@
 {
- "ejecuciones": 10,
+ "ejecuciones": 11,
  "alertas_enviadas": {},
  "inicializado": true,
- "ultimo_resumen": "2026-09-26",
+ "ultimo_resumen": "2026-09-27",
  "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-09-27T06:36:59+00:00",
-  "google_ok": 90,
+  "fecha": "2026-09-27T09:30:30+00:00",
+  "google_ok": 68,
   "google_fallos": 0,
   "alertas": 0
  }
