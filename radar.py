@@ -426,7 +426,14 @@ def telegram(text):
         log("Telegram no configurado; mensaje no enviado:\n" + text)
         return False
     ok = True
-    for chunk in [text[i:i + 3900] for i in range(0, len(text), 3900)]:
+    chunks, cur = [], ""
+    for line in text.split("\n"):
+        if len(cur) + len(line) + 1 > 3900 and cur:
+            chunks.append(cur)
+            cur = ""
+        cur += (("\n" if cur else "") + line)
+    chunks.append(cur)
+    for chunk in chunks:
         try:
             r = requests.post(
                 f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage",
@@ -500,8 +507,71 @@ def build_message(a, cfg):
     return "\n".join(lines)
 
 
+def _learned_text(cfg, gf_index):
+    windows, cfg_a, routes = cfg["ventanas"], cfg["alertas"], cfg.get("rutas", [])
+    learned = sum(1 for r in routes for wid in windows
+                  if sum(1 for t, _, _ in gf_index.get((r["id"], wid), []) if t == "candidato")
+                  >= cfg_a["min_observaciones"])
+    return f"🧠 Precio normal aprendido: {learned}/{len(routes) * len(windows)} combinaciones ruta-ventana"
+
+
+def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_ventana=None):
+    """Resumen de las últimas 24 h: un mensaje por ventana de antelación."""
+    windows = cfg["ventanas"]
+    cfg_a = cfg["alertas"]
+    routes = cfg.get("rutas", [])
+    if gf_index is None:
+        gf_index = build_gf_index(read_csv(GF_FILE, cfg_a["dias_historial"]), windows)
+    recent = read_csv(GF_FILE, 1) + (extra_rows or [])
+    titulo = titulo or "☀️ <b>Resumen diario</b>"
+    wids = [solo_ventana] if solo_ventana else list(windows)
+    messages = []
+    for n, wid in enumerate(wids, 1):
+        w = windows[wid]
+        lines = [f"{titulo} · {fdate(TODAY)}",
+                 f"<b>{n}/{len(wids)} · {w['nombre']}</b> (salidas en {w['desde_dias']}–{w['hasta_dias']} días)"
+                 if len(wids) > 1 else
+                 f"<b>{w['nombre']}</b> (salidas en {w['desde_dias']}–{w['hasta_dias']} días)"]
+        missing = []
+        for tier_name, tier in (("Prioritarias", "alta"), ("Secundarias", "media")):
+            tier_lines = []
+            for route in [r for r in routes if r.get("prioridad", "media") == tier]:
+                rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]
+                        and window_of(date.fromisoformat(r["salida"]), windows) == wid]
+                if not rows:
+                    missing.append(route["nombre"])
+                    continue
+                b = min(rows, key=lambda r: float(r["precio"]))
+                price = float(b["precio"])
+                d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
+                cands = [p for t, _, p in gf_index.get((route["id"], wid), []) if t == "candidato"]
+                ref = ""
+                if len(cands) >= cfg_a["min_observaciones"]:
+                    typ = statistics.median(cands)
+                    diff = price / typ - 1
+                    arrow = "🟢" if diff <= -0.10 else "🔴" if diff >= 0.10 else "⚪"
+                    ref = f" {arrow} habitual ~{euros(typ)}"
+                tgt = f" 🎯{euros(float(route['precio_objetivo']))}" if route.get("precio_objetivo") else ""
+                tier_lines.append(f"• {html.escape(route['nombre'])}: <b>{euros(price)}</b> "
+                                  f"({fdate(d1)} → {fdate(d2)}){ref}{tgt}")
+            if tier_lines:
+                lines.append(f"\n<b>{tier_name}</b>")
+                lines.extend(tier_lines)
+        if missing:
+            lines.append(f"\n<i>Sin datos hoy: {html.escape(', '.join(missing))}</i>")
+        messages.append("\n".join(lines))
+    footer = [_learned_text(cfg, gf_index)]
+    p = paused_until(cfg)
+    if p:
+        footer.append(f"⏸ Alertas en pausa hasta el {fdate(p.astimezone(MADRID).date())}")
+    footer.append("Precios más bajos vistos en las últimas 24 h, con tu equipaje incluido. "
+                  "🟢 barato · ⚪ normal · 🔴 caro, frente al mejor precio habitual.")
+    messages[-1] += "\n\n" + "\n".join(footer)
+    return messages
+
+
 def summary_text(cfg, extra_rows=None, gf_index=None, titulo=None):
-    """Mejores precios de las últimas 24 h por ruta (usado en el resumen y en /resumen)."""
+    """Versión en un solo mensaje (mejor precio de cualquier ventana)."""
     windows = cfg["ventanas"]
     cfg_a = cfg["alertas"]
     routes = cfg.get("rutas", [])
@@ -526,10 +596,7 @@ def summary_text(cfg, extra_rows=None, gf_index=None, titulo=None):
             tgt = f" 🎯{euros(float(route['precio_objetivo']))}" if route.get("precio_objetivo") else ""
             lines.append(f"• {html.escape(route['nombre'])}: <b>{euros(float(b['precio']))}</b> "
                          f"({fdate(d1)} → {fdate(d2)}{wtxt}){tgt}")
-    learned = sum(1 for r in routes for wid in windows
-                  if sum(1 for t, _, _ in gf_index.get((r["id"], wid), []) if t == "candidato")
-                  >= cfg_a["min_observaciones"])
-    lines.append(f"\n🧠 Precio normal aprendido: {learned}/{len(routes) * len(windows)} combinaciones ruta-ventana")
+    lines.append("\n" + _learned_text(cfg, gf_index))
     p = paused_until(cfg)
     if p:
         lines.append(f"⏸ Alertas en pausa hasta el {fdate(p.astimezone(MADRID).date())}")
@@ -731,25 +798,31 @@ def main():
             f"{windows[w]['nombre']} {len(l)}" for w, l in by_w.items()) if by_w
             else f"Radar {route['nombre']}: sin datos en caché")
 
-    # ---------- 3. Plan de consultas a Google ----------
-    tasks = []  # (orden, ruta, ventana, tipo, salida, regreso, oferta_tp)
-    for idx, route in enumerate(routes):
+    # ---------- 3. Plan de consultas a Google (reparto justo) ----------
+    # Una cola por (prioridad, ventana). Dentro de cada cola: primero la oferta más barata
+    # de cada ruta, luego las muestras para aprender el precio normal y, por último, la mejor
+    # opción viernes → lunes. Las colas se turnan: las prioritarias reciben 3 turnos por
+    # cada turno de las secundarias (≈75% / 25%), y todas las ventanas reciben su parte.
+    queues = {}
+    rot_routes = routes[run_n % max(len(routes), 1):] + routes[:run_n % max(len(routes), 1)]
+    for route in rot_routes:
+        idx = routes.index(route)
         profile = profiles[route["perfil"]]
         tier = 0 if route.get("prioridad", "media") == "alta" else 1
         lo, hi = profile["estancia_dias"]
         for wid in due:
             w = windows[wid]
+            q = queues.setdefault((tier, wid), {"cand": [], "muestra": [], "finde": []})
             offers = tp_by_route.get(route["id"], {}).get(wid, [])
-            if offers:  # la oferta más barata del radar
+            if offers:
                 o = offers[0]
-                tasks.append((tier, 0, route, wid, "candidato", o["dep"], o["ret"], o))
-            if profile.get("fin_de_semana") and tier == 0:  # la mejor de viernes → lunes
+                q["cand"].append((route, wid, "candidato", o["dep"], o["ret"], o))
+            if profile.get("fin_de_semana"):
                 wk = next((o for o in offers if is_weekend_trip(o["dep"], o["ret"])), None)
-                if wk and (not offers or wk is not offers[0]):
-                    tasks.append((tier, 0, route, wid, "candidato", wk["dep"], wk["ret"], wk))
-            # muestra rotativa para aprender el precio normal de la ventana
+                if wk and wk is not (offers[0] if offers else None):
+                    q["finde"].append((route, wid, "candidato", wk["dep"], wk["ret"], wk))
             start = TODAY + timedelta(days=w["desde_dias"])
-            span = max(w["hasta_dias"] - w["desde_dias"] - hi, 1)
+            span = max(w["hasta_dias"] - w["desde_dias"], 1)
             off = ((run_n * 7) + idx * 3) % span
             dep = start + timedelta(days=off)
             if profile.get("fin_de_semana") and random.random() < 0.7:
@@ -758,11 +831,20 @@ def main():
             else:
                 ret = dep + timedelta(days=random.randint(lo, hi))
             if window_of(dep, windows) == wid:
-                tasks.append((tier, 1, route, wid, "muestra", dep, ret, None))
-    rot = run_n % max(len(tasks), 1)
-    tasks = tasks[rot:] + tasks[:rot]  # reparto justo entre ejecuciones
-    tasks.sort(key=lambda t: (t[0], t[1]))
-    log(f"Consultas planificadas en Google: {len(tasks)} (máximo {google_budget})")
+                q["muestra"].append((route, wid, "muestra", dep, ret, None))
+    ordered = {k: v["cand"] + v["muestra"] + v["finde"] for k, v in queues.items()}
+    total_planned = sum(len(v) for v in ordered.values())
+    tasks = []
+    weights = {0: 3, 1: 1}
+    while any(ordered.values()) and len(tasks) < google_budget:
+        for wid in due:
+            for tier in (0, 1):
+                lst = ordered.get((tier, wid), [])
+                for _ in range(weights[tier]):
+                    if lst:
+                        tasks.append(lst.pop(0))
+    log(f"Consultas a Google: {len(tasks[:google_budget])} de {total_planned} posibles")
+    tasks = [(None, None) + t for t in tasks]
 
     best_seen = {}
     for tier, _, route, wid, tipo, dep, ret, tp_o in tasks:
@@ -888,13 +970,20 @@ def main():
     # ---------- 6. Resumen diario ----------
     hour = cfg_a.get("resumen_diario_hora")
     if hour is not None and NOW_MADRID.hour >= int(hour) and state.get("ultimo_resumen") != TODAY.isoformat():
-        text = summary_text(cfg, gf_rows, gf_index)
+        if cfg_a.get("resumen_por_ventana", True):
+            msgs = summary_messages(cfg, gf_rows, gf_index)
+        else:
+            msgs = [summary_text(cfg, gf_rows, gf_index)]
         total_g = stats["google_ok"] + stats["google_fail"]
         if total_g and stats["google_fail"] / total_g > 0.5:
-            text += "\n⚠️ Google Flights está fallando en muchas consultas. Avísale a Claude."
+            msgs[-1] += "\n⚠️ Google Flights está fallando en muchas consultas. Avísale a Claude."
         if not TP_TOKEN:
-            text += "\n⚠️ Falta el secreto TRAVELPAYOUTS_TOKEN."
-        if telegram(text):
+            msgs[-1] += "\n⚠️ Falta el secreto TRAVELPAYOUTS_TOKEN."
+        ok = True
+        for m in msgs:
+            ok = telegram(m) and ok
+            time.sleep(1)
+        if ok:
             state["ultimo_resumen"] = TODAY.isoformat()
 
     state["ultima_ejecucion"] = {"fecha": NOW_ISO, "google_ok": stats["google_ok"],

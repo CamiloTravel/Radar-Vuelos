@@ -44,7 +44,8 @@ AYUDA = """🤖 <b>Comandos del radar</b>
 /buscar <i>ciudad ida vuelta</i> · precio ahora mismo
    ej: /buscar lisboa 13/11 16/11
 /rutas · tus rutas y objetivos
-/resumen · el resumen del día, ahora
+/resumen · el resumen por ventanas, ahora
+   /resumen corto · solo una ventana (ultimo, corto, medio, largo)
 /estado · cómo está funcionando el sistema
 
 <b>Precios objetivo</b>
@@ -334,8 +335,22 @@ def cmd_reanudar(cfg, ov, args):
     return "▶️ Alertas reactivadas."
 
 
+VENTANA_ALIAS = {"ultimo": "ultimo_minuto", "ultimo minuto": "ultimo_minuto", "um": "ultimo_minuto",
+                 "corto": "corto", "medio": "medio", "largo": "largo"}
+
+
 def cmd_resumen(cfg, ov, args):
-    return radar.summary_text(cfg, titulo=f"📋 <b>Resumen</b> · {fdate(TODAY)}")
+    """/resumen → los 4 mensajes · /resumen corto → solo esa ventana · /resumen total → uno solo."""
+    a = norm(args)
+    if a in ("total", "general", "todo junto"):
+        return radar.summary_text(cfg, titulo=f"📋 <b>Resumen</b> · {fdate(TODAY)}")
+    wid = VENTANA_ALIAS.get(a) or (a if a in cfg["ventanas"] else None)
+    if a and not wid:
+        return "Uso: /resumen · /resumen ultimo · /resumen corto · /resumen medio · /resumen largo · /resumen total"
+    msgs = radar.summary_messages(cfg, titulo="📋 <b>Resumen</b>", solo_ventana=wid)
+    for m in msgs[:-1]:
+        send(m)
+    return msgs[-1]
 
 
 def cmd_estado(cfg, ov, args):
