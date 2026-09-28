@@ -1,15 +1,44 @@
 {
- "ejecuciones": 20,
- "alertas_enviadas": {},
+ "ejecuciones": 21,
+ "alertas_enviadas": {
+  "DUB|2026-10-08|2026-10-11": {
+   "precio": 315.0,
+   "fecha": "2026-09-28T12:40:30+00:00"
+  },
+  "ROM|2027-01-14|2027-01-17": {
+   "precio": 57.0,
+   "fecha": "2026-09-28T12:40:30+00:00"
+  },
+  "BUH|2026-10-29|2026-11-01": {
+   "precio": 140.0,
+   "fecha": "2026-09-28T12:40:30+00:00"
+  }
+ },
  "inicializado": true,
  "ultimo_resumen": "2026-09-28",
  "cola_silencio": [],
  "v2_avisado": true,
- "ultimo_aviso_ruta": {},
+ "ultimo_aviso_ruta": {
+  "DUB": {
+   "precio": 315.0,
+   "fecha": "2026-09-28T12:40:30+00:00",
+   "tipo": "error_fare"
+  },
+  "BUH": {
+   "precio": 140.0,
+   "fecha": "2026-09-28T12:40:30+00:00",
+   "tipo": "error_fare"
+  },
+  "ROM": {
+   "precio": 57.0,
+   "fecha": "2026-09-28T12:40:30+00:00",
+   "tipo": "chollo"
+  }
+ },
  "ultima_ejecucion": {
-  "fecha": "2026-09-28T09:35:28+00:00",
-  "google_ok": 66,
-  "google_fallos": 0,
-  "alertas": 0
+  "fecha": "2026-09-28T12:40:30+00:00",
+  "google_ok": 88,
+  "google_fallos": 2,
+  "alertas": 3
  }
 }
