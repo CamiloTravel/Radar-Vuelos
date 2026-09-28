@@ -1,5 +1,5 @@
 {
- "ejecuciones": 23,
+ "ejecuciones": 24,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -36,8 +36,8 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-09-28T18:36:47+00:00",
-  "google_ok": 90,
+  "fecha": "2026-09-28T21:30:58+00:00",
+  "google_ok": 69,
   "google_fallos": 0,
   "alertas": 0
  }
