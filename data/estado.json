@@ -1,5 +1,5 @@
 {
- "ejecuciones": 27,
+ "ejecuciones": 28,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -16,10 +16,14 @@
   "BCN|2026-10-10|2026-10-14": {
    "precio": 135.0,
    "fecha": "2026-09-29T06:39:08+00:00"
+  },
+  "ROM|2026-11-10|2026-11-15": {
+   "precio": 98.0,
+   "fecha": "2026-09-29T09:34:59+00:00"
   }
  },
  "inicializado": true,
- "ultimo_resumen": "2026-09-28",
+ "ultimo_resumen": "2026-09-29",
  "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
@@ -45,9 +49,9 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-09-29T06:39:08+00:00",
-  "google_ok": 90,
+  "fecha": "2026-09-29T09:34:59+00:00",
+  "google_ok": 67,
   "google_fallos": 0,
-  "alertas": 1
+  "alertas": 0
  }
 }
