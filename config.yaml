@@ -100,6 +100,11 @@ rutas:
   - {id: JMK, nombre: Mykonos,          codigo_ciudad: JMK, aeropuerto: JMK, perfil: europa, prioridad: media, duracion_directo_min: 240, precio_objetivo: null}
   - {id: BUH, nombre: Bucarest,         codigo_ciudad: BUH, aeropuerto: OTP, perfil: europa, prioridad: media, duracion_directo_min: 225, precio_objetivo: null}
 
+  # --- Ida y vuelta desde otras ciudades (van a Madrid y vuelven) ---
+  #  origen_*: ciudad de salida · nombre/codigo_ciudad/aeropuerto: destino (Madrid)
+  - {id: BER-MAD, origen_nombre: Berlín, origen_ciudad: BER, origen_aeropuerto: BER, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: europa, prioridad: media, duracion_directo_min: 180, precio_objetivo: 160}
+  - {id: BOG-MAD, origen_nombre: Bogotá, origen_ciudad: BOG, origen_aeropuerto: BOG, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: largo,  prioridad: media, duracion_directo_min: 570, precio_objetivo: 750}
+
 # ------------------------------------------------------------
 # EXPLORACIÓN: Madrid a cualquier otro destino de estas regiones
 # ------------------------------------------------------------

@@ -19,7 +19,7 @@ import requests
 
 import radar
 from radar import (DATA, GF_FILE, MADRID, NOW_ISO, NOW_UTC, TG_CHAT, TG_TOKEN, TODAY,
-                   AJUSTES_FILE, build_gf_index, euros, fdate, gf_baseline, google_price,
+                   AJUSTES_FILE, build_gf_index, euros, fdate, market_stats, window_reference, google_price,
                    load_config, load_overrides, read_csv, window_of)
 
 BOT_STATE = DATA / "bot_estado.json"
@@ -50,6 +50,7 @@ AYUDA = """🤖 <b>Comandos del radar</b>
 
 <b>Precios objetivo</b>
 /objetivo <i>ciudad precio</i> · ej: /objetivo lisboa 90
+   Desde otra ciudad: /objetivo desde berlin 150
 /objetivos · ver todos
 /borrar_objetivo <i>ciudad</i>
 /sugerir <i>ciudad</i> · te propongo un objetivo con datos reales
@@ -100,15 +101,30 @@ def save_json(path, obj):
     path.write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+def _match_city(q, code, name):
+    return q.upper() == (code or "") or ALIAS.get(q) == code or (q and norm(name).startswith(q))
+
+
 def find_route(cfg, query):
-    q = norm(query)
+    """Madrid → ciudad: 'berlin' · Ciudad → Madrid: 'desde berlin', 'berlin madrid' o 'ber-mad'."""
+    q = norm(query).replace("-", " ")
     if not q:
         return None
+    reverse, forward = [r for r in cfg["rutas"] if radar.is_reverse(r)], \
+        [r for r in cfg["rutas"] if not radar.is_reverse(r)]
+    m = re.fullmatch(r"(?:desde|de) (.+)", q) or re.fullmatch(r"(.+?) (?:a )?(?:madrid|mad)", q)
+    if m:
+        city = m.group(1).strip()
+        for r in reverse:
+            if _match_city(city, r.get("origen_ciudad"), r.get("origen_nombre", "")) or \
+                    _match_city(city, r.get("origen_aeropuerto"), r.get("origen_nombre", "")):
+                return r
+        return None
     code = ALIAS.get(q, q.upper())
-    for r in cfg["rutas"]:
+    for r in forward:
         if code in (r["id"], r.get("codigo_ciudad"), r.get("aeropuerto")):
             return r
-    for r in cfg["rutas"]:
+    for r in forward:
         if norm(r["nombre"]).startswith(q) or q in norm(r["nombre"]):
             return r
     return None
@@ -139,6 +155,22 @@ def split_city_number(args):
         return None, None
 
 
+def gf_index_for(cfg, days=None):
+    return build_gf_index(read_csv(GF_FILE, days or cfg["alertas"]["dias_historial"]), cfg["ventanas"])
+
+
+def unique_prices(idx, route_id, windows, wid=None):
+    """Precio más reciente de cada combinación de fechas distinta (sin repeticiones)."""
+    latest = {}
+    for (k, w), entries in idx.items():
+        if k != route_id or (wid and w != wid):
+            continue
+        for e in entries:
+            if e["par"] not in latest or e["ts"] > latest[e["par"]]["ts"]:
+                latest[e["par"]] = e
+    return [e["precio"] for e in latest.values()]
+
+
 def route_prices(cfg, route_id, days):
     rows = read_csv(GF_FILE, days)
     return [r for r in rows if r["clave"] == route_id and r.get("precio")]
@@ -149,13 +181,17 @@ def route_prices(cfg, route_id, days):
 # ------------------------------------------------------------------
 def cmd_rutas(cfg, ov, args):
     lines = ["🗺 <b>Tus rutas</b>"]
-    for tier, title in (("alta", "Prioritarias"), ("media", "Secundarias")):
-        rs = [r for r in cfg["rutas"] if r.get("prioridad", "media") == tier]
+    groups = (("Prioritarias", lambda r: not radar.is_reverse(r) and r.get("prioridad", "media") == "alta"),
+              ("Secundarias", lambda r: not radar.is_reverse(r) and r.get("prioridad", "media") == "media"),
+              ("Ida y vuelta desde otras ciudades", radar.is_reverse))
+    for title, in_group in groups:
+        rs = [r for r in cfg["rutas"] if in_group(r)]
         if rs:
             lines.append(f"\n<b>{title}</b>")
             for r in rs:
                 t = f" · 🎯 {euros(float(r['precio_objetivo']))}" if r.get("precio_objetivo") else ""
-                lines.append(f"• {html.escape(r['nombre'])} ({r['id']}){t}")
+                name = radar.route_label(r) if radar.is_reverse(r) else f"{r['nombre']} ({r['id']})"
+                lines.append(f"• {html.escape(name)}{t}")
     return "\n".join(lines)
 
 
@@ -167,18 +203,16 @@ def cmd_precio(cfg, ov, args):
     recent = route_prices(cfg, r["id"], 2)
     if not recent:
         return f"Aún no tengo precios recientes de {html.escape(r['nombre'])}. Prueba con /buscar."
-    hist = route_prices(cfg, r["id"], 30)
-    lines = [f"💶 <b>Madrid → {html.escape(r['nombre'])}</b> · últimas 48 h\n"]
+    idx = gf_index_for(cfg)
+    lines = [f"💶 <b>{html.escape(radar.route_label(r))}</b> · últimas 48 h\n"]
     for wid, w in windows.items():
         rows = [x for x in recent if window_of(date.fromisoformat(x["salida"]), windows) == wid]
         if not rows:
             continue
         b = min(rows, key=lambda x: float(x["precio"]))
         d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
-        typical = [float(x["precio"]) for x in hist if x["tipo"] == "candidato"
-                   and window_of(date.fromisoformat(x["salida"]),
-                                 windows, datetime.fromisoformat(x["ts"]).astimezone(MADRID).date()) == wid]
-        ref = f"\n   Mejor precio habitual: ~{euros(statistics.median(typical))}" if len(typical) >= 5 else ""
+        typ = window_reference(idx, r["id"], wid, windows, cfg["alertas"])
+        ref = f"\n   Precio habitual: ~{euros(typ)}" if typ else ""
         lines.append(f"<b>{w['nombre']}</b>: {euros(float(b['precio']))} ({fdate(d1)} → {fdate(d2)}){ref}")
     if r.get("precio_objetivo"):
         lines.append(f"\n🎯 Tu objetivo: {euros(float(r['precio_objetivo']))}")
@@ -198,18 +232,21 @@ def cmd_buscar(cfg, ov, args):
     profile = cfg["perfiles"][r["perfil"]]
     max_dur = (int(r["duracion_directo_min"] * profile.get("factor_duracion", 3))
                if r.get("duracion_directo_min") else None)
-    res = google_price(cfg, cfg["origen"]["aeropuerto"], r["aeropuerto"], d1, d2, profile, max_dur)
+    res = google_price(cfg, r.get("origen_aeropuerto") or cfg["origen"]["aeropuerto"], r["aeropuerto"],
+                       d1, d2, profile, max_dur)
     if not res["ok"]:
         return "Google Flights no respondió ahora mismo. Inténtalo de nuevo en unos minutos."
     if not res["price"]:
-        return f"No encontré vuelos que cumplan tus reglas para esas fechas a {html.escape(r['nombre'])}."
-    lines = [f"🔎 <b>Madrid → {html.escape(r['nombre'])}</b>",
+        return f"No encontré vuelos que cumplan tus reglas para esas fechas ({html.escape(radar.route_label(r))})."
+    lines = [f"🔎 <b>{html.escape(radar.route_label(r))}</b>",
              f"📅 {fdate(d1)} → {fdate(d2)}",
              f"💶 <b>{euros(res['price'])}</b> ida y vuelta ({radar.bag_text(profile)})"]
     wid = window_of(d1, cfg["ventanas"])
     if wid:
-        idx = build_gf_index(read_csv(GF_FILE, cfg["alertas"]["dias_historial"]), cfg["ventanas"])
-        base = gf_baseline(idx, r["id"], wid, "muestra", (d1 - TODAY).days, cfg["ventanas"], cfg["alertas"])
+        base, _, recent_best = market_stats(gf_index_for(cfg), r["id"], wid, cfg["ventanas"], cfg["alertas"],
+                                            lead=(d1 - TODAY).days, exclude=(d1.isoformat(), d2.isoformat()))
+        if recent_best:
+            lines.append(f"🔻 Lo más barato visto esta semana en esa ventana: {euros(recent_best)}")
         if base:
             diff = 1 - res["price"] / base
             word = "por debajo" if diff >= 0 else "por encima"
@@ -232,7 +269,7 @@ def cmd_objetivo(cfg, ov, args):
     if not r:
         return "No encontré esa ruta. Escribe /rutas para ver las disponibles."
     ov.setdefault("objetivos", {})[r["id"]] = price
-    return (f"🎯 Listo. Te aviso si Madrid → {html.escape(r['nombre'])} ida y vuelta baja de "
+    return (f"🎯 Listo. Te aviso si {html.escape(radar.route_label(r))} ida y vuelta baja de "
             f"<b>{euros(price)}</b> ({radar.bag_text(cfg['perfiles'][r['perfil']])}).")
 
 
@@ -241,7 +278,7 @@ def cmd_objetivos(cfg, ov, args):
     if not rs:
         return "No tienes objetivos activos. Crea uno con /objetivo ciudad precio."
     return "🎯 <b>Tus objetivos</b>\n" + "\n".join(
-        f"• {html.escape(r['nombre'])}: {euros(float(r['precio_objetivo']))}" for r in rs)
+        f"• {html.escape(radar.route_label(r))}: {euros(float(r['precio_objetivo']))}" for r in rs)
 
 
 def cmd_borrar_objetivo(cfg, ov, args):
@@ -249,14 +286,14 @@ def cmd_borrar_objetivo(cfg, ov, args):
     if not r:
         return "No encontré esa ruta."
     ov.setdefault("objetivos", {})[r["id"]] = None
-    return f"🗑 Objetivo de {html.escape(r['nombre'])} eliminado."
+    return f"🗑 Objetivo de {html.escape(radar.route_label(r))} eliminado."
 
 
 def cmd_sugerir(cfg, ov, args):
     r = find_route(cfg, args)
     if not r:
         return "No encontré esa ruta."
-    prices = sorted(float(x["precio"]) for x in route_prices(cfg, r["id"], 30) if x["tipo"] == "candidato")
+    prices = sorted(unique_prices(gf_index_for(cfg, 30), r["id"], cfg["ventanas"]))
     if len(prices) < 20:
         return (f"Aún tengo pocos datos de {html.escape(r['nombre'])} ({len(prices)} precios). "
                 "Pregúntame de nuevo en unos días.")
@@ -264,12 +301,12 @@ def cmd_sugerir(cfg, ov, args):
     p25 = prices[int(len(prices) * 0.25)]
     step = 10 if r["perfil"] == "largo" else 5
     target = int(p10 // step * step)
-    return (f"📊 <b>{html.escape(r['nombre'])}</b> · últimos 30 días ({len(prices)} precios)\n"
+    return (f"📊 <b>{html.escape(radar.route_label(r))}</b> · últimos 30 días ({len(prices)} fechas distintas)\n"
             f"• Mínimo visto: {euros(prices[0])}\n"
             f"• El 10% más barato: por debajo de {euros(p10)}\n"
             f"• El 25% más barato: por debajo de {euros(p25)}\n"
             f"• Precio típico: {euros(statistics.median(prices))}\n\n"
-            f"Sugerencia: <b>/objetivo {r['id'].lower()} {target}</b>\n"
+            f"Sugerencia: <b>/objetivo {('desde ' + norm(r['origen_nombre'])) if radar.is_reverse(r) else r['id'].lower()} {target}</b>\n"
             "Así solo te avisaré de precios que aparecen en muy pocas ocasiones.")
 
 
@@ -379,12 +416,9 @@ def cmd_compre(cfg, ov, args):
     if not r:
         return "No encontré esa ruta."
     windows = cfg["ventanas"]
-    hist = route_prices(cfg, r["id"], 30)
     wid = window_of(dep, windows) if dep else None
-    vals = [float(x["precio"]) for x in hist if x["tipo"] == "candidato" and (
-        not wid or window_of(date.fromisoformat(x["salida"]), windows,
-                             datetime.fromisoformat(x["ts"]).astimezone(MADRID).date()) == wid)]
-    normal = statistics.median(vals) if len(vals) >= 5 else None
+    vals = unique_prices(gf_index_for(cfg, 30), r["id"], windows, wid)
+    normal = statistics.median(vals) if len(vals) >= 10 else None
     ahorro = round(normal - price, 2) if normal else None
     new = not COMPRAS_FILE.exists()
     with open(COMPRAS_FILE, "a", newline="", encoding="utf-8") as f:
@@ -394,7 +428,7 @@ def cmd_compre(cfg, ov, args):
         w.writerow({"fecha": TODAY.isoformat(), "clave": r["id"], "nombre": r["nombre"], "precio": price,
                     "normal": round(normal, 2) if normal else "", "ahorro": ahorro if ahorro is not None else "",
                     "salida": dep.isoformat() if dep else ""})
-    msg = f"🧾 Compra registrada: Madrid → {html.escape(r['nombre'])} por {euros(price)}."
+    msg = f"🧾 Compra registrada: {html.escape(radar.route_label(r))} por {euros(price)}."
     if ahorro is not None:
         msg += (f"\nEl precio habitual era ~{euros(normal)}: "
                 + (f"<b>ahorraste {euros(ahorro)}</b> 🎉" if ahorro > 0 else f"pagaste {euros(-ahorro)} más de lo habitual."))
