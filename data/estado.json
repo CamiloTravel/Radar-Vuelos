@@ -1,5 +1,5 @@
 {
- "ejecuciones": 26,
+ "ejecuciones": 27,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -12,41 +12,15 @@
   "BUH|2026-10-29|2026-11-01": {
    "precio": 140.0,
    "fecha": "2026-09-28T12:40:30+00:00"
+  },
+  "BCN|2026-10-10|2026-10-14": {
+   "precio": 135.0,
+   "fecha": "2026-09-29T06:39:08+00:00"
   }
  },
  "inicializado": true,
  "ultimo_resumen": "2026-09-28",
- "cola_silencio": [
-  {
-   "tipo": "chollo",
-   "clave": "BCN",
-   "nombre": "Barcelona",
-   "perfil": "europa",
-   "ventana": "ultimo_minuto",
-   "ventana_nombre": "Último minuto",
-   "salida": "2026-10-10",
-   "regreso": "2026-10-14",
-   "precio": 140.0,
-   "normal": 187.0,
-   "caida": 0.25133689839572193,
-   "puntuacion": 69,
-   "aerolineas": [
-    "Iberia"
-   ],
-   "preferida": true,
-   "escalas": 0,
-   "vuelo": {
-    "sale": "06:35 MAD",
-    "llega": "07:55 BCN",
-    "via": []
-   },
-   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTBg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEwLTE0YPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR",
-   "tp_link": "https://www.aviasales.com/search/MAD1010BCN14101?t=VY17916591001791663600000075MADBCN17920029001792008000000085BCNMAD_0d119eaed40e519035a6ea83e3dda96b_10781&search_date=29092026&expected_price_uuid=01a0eac9-0522-8030-69e4-1ad618d704c6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=lBCs_VkJgQribMrcy-C_KA&expected_price_source=share&expected_price_currency=eur&expected_price=112",
-   "nota": null,
-   "aeropuerto": "BCN",
-   "en_cola_desde": "2026-09-29T03:33:53+00:00"
-  }
- ],
+ "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
   "DUB": {
@@ -63,12 +37,17 @@
    "precio": 57.0,
    "fecha": "2026-09-28T12:40:30+00:00",
    "tipo": "chollo"
+  },
+  "BCN": {
+   "precio": 135.0,
+   "fecha": "2026-09-29T06:39:08+00:00",
+   "tipo": "chollo"
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-09-29T03:33:53+00:00",
-  "google_ok": 70,
+  "fecha": "2026-09-29T06:39:08+00:00",
+  "google_ok": 90,
   "google_fallos": 0,
-  "alertas": 0
+  "alertas": 1
  }
 }
