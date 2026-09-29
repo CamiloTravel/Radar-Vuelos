@@ -698,6 +698,8 @@ def main():
     min_lead = min(windows[w]["desde_dias"] for w in due)
     max_lead = max(windows[w]["hasta_dias"] for w in due)
     months = months_between(TODAY + timedelta(days=min_lead), TODAY + timedelta(days=max_lead))
+    all_months = months_between(TODAY + timedelta(days=min(w["desde_dias"] for w in windows.values())),
+                                TODAY + timedelta(days=max(w["hasta_dias"] for w in windows.values())))
 
     # ---------- utilidades internas ----------
     paused = paused_until(cfg)
@@ -786,6 +788,7 @@ def main():
             "url": res.get("url"), "tp_link": tp_o["link"] if tp_o else None, "nota": note,
             "aeropuerto": route["aeropuerto"], "origen_aeropuerto": route.get("origen_aeropuerto"),
             "ruta_txt": route_label(route),
+            "objetivo": float(target) if target else None,
         })
 
     # ---------- 1. Cola de silencio: reconfirmar y enviar a las 7:00 ----------
@@ -821,15 +824,17 @@ def main():
         profile = profiles[route["perfil"]]
         max_dur = (int(route["duracion_directo_min"] * profile.get("factor_duracion", 3))
                    if route.get("duracion_directo_min") else None)
+        has_target = bool(route.get("precio_objetivo"))
+        route_windows = list(windows) if has_target else due  # objetivos: siempre las 4 ventanas
         offers = []
-        for m in months:
+        for m in (all_months if has_target else months):
             for item in tp_request({"origin": route.get("origen_ciudad") or origin_city,
                                     "destination": route["codigo_ciudad"],
                                     "departure_at": m}):
                 o = tp_offer(item)
                 if o and stay_ok(o, profile, max_dur):
                     o["ventana"] = window_of(o["dep"], windows)
-                    if o["ventana"] in due:
+                    if o["ventana"] in route_windows:
                         offers.append(o)
             time.sleep(0.25)
         by_w = {}
@@ -894,8 +899,28 @@ def main():
             if window_of(dep, windows) == wid:
                 q["muestra"].append((route, wid, "muestra", dep, ret, None))
     ordered = {k: v["cand"] + v["muestra"] + v["finde"] for k, v in queues.items()}
+
+    # Búsqueda de objetivos: en cada ventana, las fechas que el radar ve cerca de tu
+    # precio objetivo se verifican en Google antes que cualquier otra consulta.
+    target_tasks = []
+    margen = float(cfg_a.get("margen_busqueda_objetivo", 0.15))
+    for route in routes:
+        target = route.get("precio_objetivo")
+        if not target:
+            continue
+        for wid in windows:
+            near = [o for o in tp_by_route.get(route["id"], {}).get(wid, [])
+                    if o["price"] <= float(target) * (1 + margen)
+                    and f"{route['id']}|{o['dep']}|{o['ret']}" not in stale][:2]
+            for o in near:
+                target_tasks.append((route, wid, "candidato", o["dep"], o["ret"], o))
+    planned = {(t[0]["id"], t[3], t[4]) for t in target_tasks}
+    for k in ordered:
+        ordered[k] = [t for t in ordered[k] if (t[0]["id"], t[3], t[4]) not in planned]
+    if target_tasks:
+        log(f"Búsqueda de objetivos: {len(target_tasks)} fechas cerca de tus precios objetivo")
     total_planned = sum(len(v) for v in ordered.values())
-    tasks = []
+    tasks = list(target_tasks[:google_budget])
     weights = {0: 3, 1: 1}
     while any(ordered.values()) and len(tasks) < google_budget:
         for wid in due:
@@ -904,7 +929,7 @@ def main():
                 for _ in range(weights[tier]):
                     if lst:
                         tasks.append(lst.pop(0))
-    log(f"Consultas a Google: {len(tasks[:google_budget])} de {total_planned} posibles")
+    log(f"Consultas a Google: {len(tasks[:google_budget])} de {total_planned + len(target_tasks)} posibles")
     tasks = [(None, None) + t for t in tasks]
 
     best_seen = {}
@@ -1022,6 +1047,13 @@ def main():
         mejora = float(cfg_a.get("mejora_minima_para_repetir", 0.10))
         if prev and not upgrade and best["precio"] > prev["precio"] * (1 - mejora):
             continue
+        targets_met = [a for a in group if a["tipo"] == "objetivo" or
+                       (a.get("objetivo") and a["precio"] <= a["objetivo"])]
+        if targets_met:
+            wnames = [windows[w]["nombre"] for w in windows
+                      if any(a["ventana"] == w for a in targets_met)]
+            txt = f"Por debajo de tu objetivo en: {', '.join(wnames)}"
+            best["nota"] = f"{best['nota']}. {txt}" if best.get("nota") else txt
         others = len({(a["salida"], a["regreso"]) for a in group}) - 1
         if others > 0:
             extra = f"Hay {others} fecha{'s' if others > 1 else ''} más con precios muy bajos en esta ruta"

@@ -67,6 +67,7 @@ alertas:
   mejora_minima_para_repetir: 0.10 # Máx. 1 aviso por ruta cada 24 h, salvo que mejore un 10%
   silencio: {desde: 1, hasta: 7}   # Horas de Madrid sin alertas (salvo error fares)
   resumen_diario_hora: 9
+  margen_busqueda_objetivo: 0.15   # Verificar en Google fechas del radar hasta un 15% por encima del objetivo
   resumen_por_ventana: true        # true: 4 mensajes (uno por ventana) · false: un solo mensaje
 
 google:
