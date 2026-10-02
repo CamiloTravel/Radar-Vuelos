@@ -1,21 +1,27 @@
 {
- "actualizado": "2026-10-02T03:34:20+00:00",
+ "actualizado": "2026-10-02T06:40:09+00:00",
  "rutas": {
   "BER": {
    "nombre": "Berlín",
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 307.0,
-     "salida": "2026-10-08",
-     "regreso": "2026-10-11",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDhgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI2LTEwLTExYJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 322.0,
+     "salida": "2026-10-16",
+     "regreso": "2026-10-21",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI2LTEwLTIxYJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 212.0,
+     "precio": 197.0,
      "salida": "2026-11-25",
      "regreso": "2026-11-28",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjVgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI2LTExLTI4YJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 214.0,
+     "salida": "2026-12-11",
+     "regreso": "2026-12-14",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTFgnARqBRIDTUFEcgUSA0JFUhodEgoyMDI2LTEyLTE0YJwEagUSA0JFUnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -24,16 +30,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 357.0,
-     "salida": "2026-10-12",
-     "regreso": "2026-10-17",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTJgwgNqBRIDTUFEcgUSA01VQxodEgoyMDI2LTEwLTE3YMIDagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 543.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-12",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlgwgNqBRIDTUFEcgUSA01VQxodEgoyMDI2LTEwLTEyYMIDagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 238.0,
-     "salida": "2026-10-23",
-     "regreso": "2026-10-26",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjNgwgNqBRIDTUFEcgUSA01VQxodEgoyMDI2LTEwLTI2YMIDagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 260.0,
+     "salida": "2026-11-06",
+     "regreso": "2026-11-09",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMDZgwgNqBRIDTUFEcgUSA01VQxodEgoyMDI2LTExLTA5YMIDagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 175.0,
+     "salida": "2026-12-12",
+     "regreso": "2026-12-16",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTJgwgNqBRIDTUFEcgUSA01VQxodEgoyMDI2LTEyLTE2YMIDagUSA01VQ3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -42,16 +54,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 167.0,
-     "salida": "2026-10-16",
-     "regreso": "2026-10-19",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEwLTE5YPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 206.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-12",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEwLTEyYPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 130.0,
-     "salida": "2026-12-01",
-     "regreso": "2026-12-04",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMDFg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEyLTA0YPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 125.0,
+     "salida": "2026-10-27",
+     "regreso": "2026-11-01",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjdg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTExLTAxYPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 134.0,
+     "salida": "2026-12-18",
+     "regreso": "2026-12-21",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMThg8AFqBRIDTUFEcgUSA0JDThodEgoyMDI2LTEyLTIxYPABagUSA0JDTnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -60,16 +78,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 87.0,
-     "salida": "2026-10-05",
-     "regreso": "2026-10-09",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDVg0gFqBRIDTUFEcgUSA0lCWhodEgoyMDI2LTEwLTA5YNIBagUSA0lCWnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 53.0,
+     "salida": "2026-10-12",
+     "regreso": "2026-10-17",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTJg0gFqBRIDTUFEcgUSA0lCWhodEgoyMDI2LTEwLTE3YNIBagUSA0lCWnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
      "precio": 52.0,
      "salida": "2026-10-18",
      "regreso": "2026-10-21",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMThg0gFqBRIDTUFEcgUSA0lCWhodEgoyMDI2LTEwLTIxYNIBagUSA0lCWnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 63.0,
+     "salida": "2026-12-18",
+     "regreso": "2026-12-21",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMThg0gFqBRIDTUFEcgUSA0lCWhodEgoyMDI2LTEyLTIxYNIBagUSA0lCWnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -78,16 +102,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 345.0,
-     "salida": "2026-10-08",
-     "regreso": "2026-10-11",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDhgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI2LTEwLTExYMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 338.0,
+     "salida": "2026-10-16",
+     "regreso": "2026-10-19",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI2LTEwLTE5YMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
      "precio": 179.0,
      "salida": "2026-11-21",
      "regreso": "2026-11-25",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjFgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI2LTExLTI1YMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 173.0,
+     "salida": "2026-12-10",
+     "regreso": "2026-12-13",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTBgwgNqBRIDTUFEcgUSA0FNUxodEgoyMDI2LTEyLTEzYMIDagUSA0FNU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -96,16 +126,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 118.0,
-     "salida": "2026-10-16",
-     "regreso": "2026-10-19",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZg4QFqBRIDTUFEcgUSA0xJUxodEgoyMDI2LTEwLTE5YOEBagUSA0xJU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 341.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-13",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlg4QFqBRIDTUFEcgUSA0xJUxodEgoyMDI2LTEwLTEzYOEBagUSA0xJU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
      "precio": 78.0,
      "salida": "2026-11-09",
      "regreso": "2026-11-12",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMDlg4QFqBRIDTUFEcgUSA0xJUxodEgoyMDI2LTExLTEyYOEBagUSA0xJU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 71.0,
+     "salida": "2026-12-24",
+     "regreso": "2026-12-27",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMjRg4QFqBRIDTUFEcgUSA0xJUxodEgoyMDI2LTEyLTI3YOEBagUSA0xJU3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -114,16 +150,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 291.0,
-     "salida": "2026-10-16",
-     "regreso": "2026-10-19",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTEwLTE5YMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 335.0,
+     "salida": "2026-10-10",
+     "regreso": "2026-10-13",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTBgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTEwLTEzYMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 147.0,
-     "salida": "2026-10-31",
-     "regreso": "2026-11-04",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMzFgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTExLTA0YMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 96.0,
+     "salida": "2026-11-10",
+     "regreso": "2026-11-15",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMTBgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTExLTE1YMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 72.0,
+     "salida": "2026-12-12",
+     "regreso": "2026-12-16",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTJgwgNqBRIDTUFEcgUSA0ZDTxodEgoyMDI2LTEyLTE2YMIDagUSA0ZDT3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -132,16 +174,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 1025.0,
+     "precio": 992.0,
      "salida": "2026-10-08",
      "regreso": "2026-10-22",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDhg9AhqBRIDTUFEcgUSA0JPRxodEgoyMDI2LTEwLTIyYPQIagUSA0JPR3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
      "precio": 851.0,
-     "salida": "2026-11-04",
-     "regreso": "2026-11-24",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMDRg9AhqBRIDTUFEcgUSA0JPRxodEgoyMDI2LTExLTI0YPQIagUSA0JPR3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "salida": "2026-11-11",
+     "regreso": "2026-11-26",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMTFg9AhqBRIDTUFEcgUSA0JPRxodEgoyMDI2LTExLTI2YPQIagUSA0JPR3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 1022.0,
+     "salida": "2027-01-15",
+     "regreso": "2027-01-30",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMTVg9AhqBRIDTUFEcgUSA0JPRxodEgoyMDI3LTAxLTMwYPQIagUSA0JPR3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -150,16 +198,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 992.0,
-     "salida": "2026-10-07",
-     "regreso": "2026-10-21",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDdghAdqBRIDTUFEcgUSA01JQRodEgoyMDI2LTEwLTIxYIQHagUSA01JQXIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 680.0,
+     "salida": "2026-10-14",
+     "regreso": "2026-11-04",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTRghAdqBRIDTUFEcgUSA01JQRodEgoyMDI2LTExLTA0YIQHagUSA01JQXIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 587.0,
-     "salida": "2026-11-07",
-     "regreso": "2026-11-27",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMDdghAdqBRIDTUFEcgUSA01JQRodEgoyMDI2LTExLTI3YIQHagUSA01JQXIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 558.0,
+     "salida": "2026-11-14",
+     "regreso": "2026-11-30",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMTRghAdqBRIDTUFEcgUSA01JQRodEgoyMDI2LTExLTMwYIQHagUSA01JQXIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 1078.0,
+     "salida": "2026-12-26",
+     "regreso": "2027-01-10",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMjZghAdqBRIDTUFEcgUSA01JQRodEgoyMDI3LTAxLTEwYIQHagUSA01JQXIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -168,16 +222,22 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 1307.0,
-     "salida": "2026-10-10",
-     "regreso": "2026-10-26",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTBgoAtqBRIDTUFEcgUSA01FWBodEgoyMDI2LTEwLTI2YKALagUSA01FWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 1463.0,
+     "salida": "2026-10-04",
+     "regreso": "2026-10-25",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDRgoAtqBRIDTUFEcgUSA01FWBodEgoyMDI2LTEwLTI1YKALagUSA01FWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
      "precio": 880.0,
      "salida": "2026-11-21",
      "regreso": "2026-12-05",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjFgoAtqBRIDTUFEcgUSA01FWBodEgoyMDI2LTEyLTA1YKALagUSA01FWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 852.0,
+     "salida": "2027-02-18",
+     "regreso": "2027-03-04",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMThgoAtqBRIDTUFEcgUSA01FWBodEgoyMDI3LTAzLTA0YKALagUSA01FWHIFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -186,16 +246,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 593.0,
+     "precio": 512.0,
      "salida": "2026-10-14",
      "regreso": "2026-10-30",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTRgwAdqBRIDTUFEcgUSA0pGSxodEgoyMDI2LTEwLTMwYMAHagUSA0pGS3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 374.0,
-     "salida": "2026-11-13",
-     "regreso": "2026-12-01",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMTNgwAdqBRIDTUFEcgUSA0pGSxodEgoyMDI2LTEyLTAxYMAHagUSA0pGS3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 389.0,
+     "salida": "2026-11-20",
+     "regreso": "2026-12-11",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjBgwAdqBRIDTUFEcgUSA0pGSxodEgoyMDI2LTEyLTExYMAHagUSA0pGS3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 580.0,
+     "salida": "2026-12-15",
+     "regreso": "2026-12-29",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTVgwAdqBRIDTUFEcgUSA0pGSxodEgoyMDI2LTEyLTI5YMAHagUSA0pGS3IFEgNNQURCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -204,16 +270,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 327.0,
-     "salida": "2026-10-03",
-     "regreso": "2026-10-07",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDNgwgNqBRIDTUFEcgUSA0RVQhodEgoyMDI2LTEwLTA3YMIDagUSA0RVQnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 389.0,
+     "salida": "2026-10-10",
+     "regreso": "2026-10-15",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTBgwgNqBRIDTUFEcgUSA0RVQhodEgoyMDI2LTEwLTE1YMIDagUSA0RVQnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 99.0,
-     "salida": "2026-12-01",
-     "regreso": "2026-12-05",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMDFgwgNqBRIDTUFEcgUSA0RVQhodEgoyMDI2LTEyLTA1YMIDagUSA0RVQnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 156.0,
+     "salida": "2026-11-27",
+     "regreso": "2026-11-30",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjdgwgNqBRIDTUFEcgUSA0RVQhodEgoyMDI2LTExLTMwYMIDagUSA0RVQnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 403.0,
+     "salida": "2026-12-04",
+     "regreso": "2026-12-08",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMDRgwgNqBRIDTUFEcgUSA0RVQhodEgoyMDI2LTEyLTA4YMIDagUSA0RVQnIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -222,16 +294,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 352.0,
-     "salida": "2026-10-06",
-     "regreso": "2026-10-09",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDZgqwRqBRIDTUFEcgUSA0JVRBodEgoyMDI2LTEwLTA5YKsEagUSA0JVRHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 469.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-13",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlgqwRqBRIDTUFEcgUSA0JVRBodEgoyMDI2LTEwLTEzYKsEagUSA0JVRHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 230.0,
-     "salida": "2026-11-20",
-     "regreso": "2026-11-23",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjBgqwRqBRIDTUFEcgUSA0JVRBodEgoyMDI2LTExLTIzYKsEagUSA0JVRHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 298.0,
+     "salida": "2026-11-26",
+     "regreso": "2026-12-01",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjZgqwRqBRIDTUFEcgUSA0JVRBodEgoyMDI2LTEyLTAxYKsEagUSA0JVRHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 366.0,
+     "salida": "2026-12-18",
+     "regreso": "2026-12-22",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMThgqwRqBRIDTUFEcgUSA0JVRBodEgoyMDI2LTEyLTIyYKsEagUSA0JVRHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -240,11 +318,12 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": {
-     "precio": 203.0,
-     "salida": "2026-11-27",
-     "regreso": "2026-11-30",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjdgugRqBRIDTUFEcgUSA0tSSxodEgoyMDI2LTExLTMwYLoEagUSA0tSS3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    "corto": null,
+    "medio": {
+     "precio": 352.0,
+     "salida": "2026-12-16",
+     "regreso": "2026-12-19",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTItMTZgugRqBRIDTUFEcgUSA0tSSxodEgoyMDI2LTEyLTE5YLoEagUSA0tSS3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -253,17 +332,18 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 453.0,
-     "salida": "2026-10-16",
-     "regreso": "2026-10-19",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTZg7wNqBRIDTUFEcgUSA1NQVRodEgoyMDI2LTEwLTE5YO8DagUSA1NQVXIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 1049.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-12",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlg7wNqBRIDTUFEcgUSA1NQVRodEgoyMDI2LTEwLTEyYO8DagUSA1NQVXIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 445.0,
-     "salida": "2026-11-27",
-     "regreso": "2026-11-30",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTEtMjdg7wNqBRIDTUFEcgUSA1NQVRodEgoyMDI2LTExLTMwYO8DagUSA1NQVXIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
-    }
+     "precio": 368.0,
+     "salida": "2026-10-23",
+     "regreso": "2026-10-26",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjNg7wNqBRIDTUFEcgUSA1NQVRodEgoyMDI2LTEwLTI2YO8DagUSA1NQVXIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": null
    }
   },
   "JMK": {
@@ -271,12 +351,18 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 612.0,
-     "salida": "2026-10-15",
-     "regreso": "2026-10-19",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTVg0AVqBRIDTUFEcgUSA0pNSxodEgoyMDI2LTEwLTE5YNAFagUSA0pNS3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 902.0,
+     "salida": "2026-10-09",
+     "regreso": "2026-10-12",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDlg0AVqBRIDTUFEcgUSA0pNSxodEgoyMDI2LTEwLTEyYNAFagUSA0pNS3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
-    "corto": null
+    "corto": {
+     "precio": 543.0,
+     "salida": "2026-10-21",
+     "regreso": "2026-10-24",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjFg0AVqBRIDTUFEcgUSA0pNSxodEgoyMDI2LTEwLTI0YNAFagUSA0pNS3IFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": null
    }
   },
   "BUH": {
@@ -284,16 +370,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 414.0,
-     "salida": "2026-10-08",
-     "regreso": "2026-10-11",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDhgowVqBRIDTUFEcgUSA09UUBodEgoyMDI2LTEwLTExYKMFagUSA09UUHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 427.0,
+     "salida": "2026-10-12",
+     "regreso": "2026-10-17",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTJgowVqBRIDTUFEcgUSA09UUBodEgoyMDI2LTEwLTE3YKMFagUSA09UUHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 356.0,
-     "salida": "2026-10-23",
-     "regreso": "2026-10-26",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjNgowVqBRIDTUFEcgUSA09UUBodEgoyMDI2LTEwLTI2YKMFagUSA09UUHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 260.0,
+     "salida": "2026-10-24",
+     "regreso": "2026-10-28",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjRgowVqBRIDTUFEcgUSA09UUBodEgoyMDI2LTEwLTI4YKMFagUSA09UUHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 102.0,
+     "salida": "2027-02-05",
+     "regreso": "2027-02-09",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMDVgowVqBRIDTUFEcgUSA09UUBodEgoyMDI3LTAyLTA5YKMFagUSA09UUHIFEgNNQURCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -302,16 +394,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 339.0,
+     "precio": 346.0,
      "salida": "2026-10-15",
      "regreso": "2026-10-20",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTVgnARqBRIDQkVScgUSA01BRBodEgoyMDI2LTEwLTIwYJwEagUSA01BRHIFEgNCRVJCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 252.0,
+     "precio": 264.0,
      "salida": "2026-10-30",
      "regreso": "2026-11-02",
      "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMzBgnARqBRIDQkVScgUSA01BRBodEgoyMDI2LTExLTAyYJwEagUSA01BRHIFEgNCRVJCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 212.0,
+     "salida": "2027-01-29",
+     "regreso": "2027-02-01",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDEtMjlgnARqBRIDQkVScgUSA01BRBodEgoyMDI3LTAyLTAxYJwEagUSA01BRHIFEgNCRVJCAQFIAWoEEAEYAIgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   },
@@ -320,16 +418,22 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": {
-     "precio": 1433.0,
-     "salida": "2026-10-11",
-     "regreso": "2026-10-26",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMTFg9AhqBRIDQk9HcgUSA01BRBodEgoyMDI2LTEwLTI2YPQIagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 1549.0,
+     "salida": "2026-10-05",
+     "regreso": "2026-10-24",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMDVg9AhqBRIDQk9HcgUSA01BRBodEgoyMDI2LTEwLTI0YPQIagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     },
     "corto": {
-     "precio": 1056.0,
-     "salida": "2026-10-23",
-     "regreso": "2026-11-08",
-     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMjNg9AhqBRIDQk9HcgUSA01BRBodEgoyMDI2LTExLTA4YPQIagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+     "precio": 1051.0,
+     "salida": "2026-10-30",
+     "regreso": "2026-11-20",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjYtMTAtMzBg9AhqBRIDQk9HcgUSA01BRBodEgoyMDI2LTExLTIwYPQIagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
+    },
+    "medio": {
+     "precio": 752.0,
+     "salida": "2027-02-01",
+     "regreso": "2027-02-22",
+     "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMDFg9AhqBRIDQk9HcgUSA01BRBodEgoyMDI3LTAyLTIyYPQIagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR"
     }
    }
   }
@@ -343,9 +447,9 @@
   },
   "PMI": {
    "nombre": "Palma",
-   "precio": 30.0,
-   "salida": "2026-11-04",
-   "regreso": "2026-11-08"
+   "precio": 29.0,
+   "salida": "2027-01-26",
+   "regreso": "2027-01-31"
   },
   "MAH": {
    "nombre": "Menorca",
@@ -421,9 +525,9 @@
   },
   "VLC": {
    "nombre": "Valencia",
-   "precio": 76.0,
-   "salida": "2026-10-09",
-   "regreso": "2026-10-12"
+   "precio": 63.0,
+   "salida": "2027-02-01",
+   "regreso": "2027-02-04"
   },
   "AGP": {
    "nombre": "Malaga",
@@ -469,9 +573,15 @@
   },
   "TCI": {
    "nombre": "Tenerife",
-   "precio": 61.0,
-   "salida": "2026-11-11",
-   "regreso": "2026-11-16"
+   "precio": 57.0,
+   "salida": "2027-01-10",
+   "regreso": "2027-01-14"
+  },
+  "OSL": {
+   "nombre": "Oslo",
+   "precio": 127.0,
+   "salida": "2026-10-25",
+   "regreso": "2026-10-30"
   },
   "FRA": {
    "nombre": "Frankfurt",
@@ -505,15 +615,15 @@
   },
   "AYT": {
    "nombre": "Antalya",
-   "precio": 271.0,
-   "salida": "2026-10-17",
-   "regreso": "2026-10-22"
+   "precio": 239.0,
+   "salida": "2027-01-17",
+   "regreso": "2027-01-22"
   },
   "ATH": {
    "nombre": "Athens",
-   "precio": 272.0,
-   "salida": "2026-10-05",
-   "regreso": "2026-10-09"
+   "precio": 172.0,
+   "salida": "2026-12-24",
+   "regreso": "2026-12-29"
   },
   "SCL": {
    "nombre": "Santiago",
@@ -523,27 +633,27 @@
   },
   "SAO": {
    "nombre": "Sao Paulo",
-   "precio": 823.0,
-   "salida": "2026-10-19",
-   "regreso": "2026-11-05"
+   "precio": 734.0,
+   "salida": "2027-03-30",
+   "regreso": "2027-04-20"
   },
   "CUN": {
    "nombre": "Cancun",
-   "precio": 827.0,
-   "salida": "2026-10-17",
-   "regreso": "2026-11-04"
+   "precio": 757.0,
+   "salida": "2027-01-20",
+   "regreso": "2027-02-03"
   },
   "UIO": {
    "nombre": "Quito",
-   "precio": 875.0,
-   "salida": "2026-10-15",
-   "regreso": "2026-11-05"
+   "precio": 681.0,
+   "salida": "2027-01-27",
+   "regreso": "2027-02-10"
   },
   "BUE": {
    "nombre": "Buenos Aires",
-   "precio": 783.0,
-   "salida": "2026-11-15",
-   "regreso": "2026-12-05"
+   "precio": 644.0,
+   "salida": "2027-03-30",
+   "regreso": "2027-04-13"
   },
   "MVD": {
    "nombre": "Montevideo",
@@ -553,15 +663,15 @@
   },
   "CUZ": {
    "nombre": "Cusco",
-   "precio": 1170.0,
-   "salida": "2026-10-05",
-   "regreso": "2026-10-19"
+   "precio": 667.0,
+   "salida": "2027-02-28",
+   "regreso": "2027-03-14"
   },
   "HAV": {
    "nombre": "Havana",
-   "precio": 1007.0,
-   "salida": "2026-11-25",
-   "regreso": "2026-12-10"
+   "precio": 882.0,
+   "salida": "2027-01-13",
+   "regreso": "2027-01-27"
   },
   "LON": {
    "nombre": "London",
@@ -571,7 +681,7 @@
   },
   "PSA": {
    "nombre": "Pisa",
-   "precio": 44.0,
+   "precio": 41.0,
    "salida": "2026-11-12",
    "regreso": "2026-11-17"
   },
@@ -631,21 +741,21 @@
   },
   "SJO": {
    "nombre": "San Jose",
-   "precio": 653.0,
-   "salida": "2026-11-19",
-   "regreso": "2026-12-04"
+   "precio": 590.0,
+   "salida": "2027-02-18",
+   "regreso": "2027-03-05"
   },
   "LIM": {
    "nombre": "Lima",
-   "precio": 697.0,
-   "salida": "2026-11-16",
-   "regreso": "2026-12-05"
+   "precio": 656.0,
+   "salida": "2027-03-19",
+   "regreso": "2027-04-04"
   },
   "GUA": {
    "nombre": "Guatemala City",
-   "precio": 802.0,
-   "salida": "2026-11-05",
-   "regreso": "2026-11-26"
+   "precio": 675.0,
+   "salida": "2027-03-20",
+   "regreso": "2027-04-03"
   },
   "MDE": {
    "nombre": "Medellin",
@@ -658,6 +768,150 @@
    "precio": 911.0,
    "salida": "2026-11-27",
    "regreso": "2026-12-13"
+  },
+  "TIA": {
+   "nombre": "Tirana",
+   "precio": 81.0,
+   "salida": "2026-12-05",
+   "regreso": "2026-12-09"
+  },
+  "GVA": {
+   "nombre": "Geneva",
+   "precio": 109.0,
+   "salida": "2026-12-03",
+   "regreso": "2026-12-07"
+  },
+  "BLQ": {
+   "nombre": "Bologna",
+   "precio": 143.0,
+   "salida": "2026-12-29",
+   "regreso": "2027-01-02"
+  },
+  "SXB": {
+   "nombre": "Strasbourg",
+   "precio": 144.0,
+   "salida": "2026-12-15",
+   "regreso": "2026-12-18"
+  },
+  "EAP": {
+   "nombre": "Basel",
+   "precio": 145.0,
+   "salida": "2026-12-06",
+   "regreso": "2026-12-10"
+  },
+  "SOF": {
+   "nombre": "Sofia",
+   "precio": 204.0,
+   "salida": "2026-12-23",
+   "regreso": "2026-12-28"
+  },
+  "RVN": {
+   "nombre": "Rovaniemi",
+   "precio": 285.0,
+   "salida": "2026-12-19",
+   "regreso": "2026-12-24"
+  },
+  "FNC": {
+   "nombre": "Funchal",
+   "precio": 427.0,
+   "salida": "2026-12-31",
+   "regreso": "2027-01-03"
+  },
+  "SJU": {
+   "nombre": "San Juan",
+   "precio": 858.0,
+   "salida": "2026-12-17",
+   "regreso": "2027-01-06"
+  },
+  "MTY": {
+   "nombre": "Monterrey",
+   "precio": 862.0,
+   "salida": "2026-12-30",
+   "regreso": "2027-01-14"
+  },
+  "ASU": {
+   "nombre": "Asuncion",
+   "precio": 1055.0,
+   "salida": "2027-01-25",
+   "regreso": "2027-02-15"
+  },
+  "ACE": {
+   "nombre": "Arrecife",
+   "precio": 68.0,
+   "salida": "2027-01-20",
+   "regreso": "2027-01-25"
+  },
+  "ALC": {
+   "nombre": "Alicante",
+   "precio": 70.0,
+   "salida": "2027-01-01",
+   "regreso": "2027-01-04"
+  },
+  "IAS": {
+   "nombre": "Iasi",
+   "precio": 126.0,
+   "salida": "2027-01-14",
+   "regreso": "2027-01-19"
+  },
+  "STO": {
+   "nombre": "Stockholm",
+   "precio": 147.0,
+   "salida": "2027-01-21",
+   "regreso": "2027-01-24"
+  },
+  "TOS": {
+   "nombre": "Tromso",
+   "precio": 166.0,
+   "salida": "2027-03-04",
+   "regreso": "2027-03-07"
+  },
+  "GYE": {
+   "nombre": "Guayaquil",
+   "precio": 645.0,
+   "salida": "2027-01-28",
+   "regreso": "2027-02-13"
+  },
+  "CLO": {
+   "nombre": "Cali",
+   "precio": 896.0,
+   "salida": "2027-01-16",
+   "regreso": "2027-01-30"
+  },
+  "MGF": {
+   "nombre": "Maringa",
+   "precio": 1019.0,
+   "salida": "2027-01-29",
+   "regreso": "2027-02-17"
+  },
+  "TRN": {
+   "nombre": "Turin",
+   "precio": 91.0,
+   "salida": "2027-02-11",
+   "regreso": "2027-02-15"
+  },
+  "FLR": {
+   "nombre": "Florence",
+   "precio": 139.0,
+   "salida": "2027-02-19",
+   "regreso": "2027-02-22"
+  },
+  "TLS": {
+   "nombre": "Toulouse",
+   "precio": 140.0,
+   "salida": "2027-03-22",
+   "regreso": "2027-03-27"
+  },
+  "CCS": {
+   "nombre": "Caracas",
+   "precio": 607.0,
+   "salida": "2027-03-09",
+   "regreso": "2027-03-28"
+  },
+  "RIO": {
+   "nombre": "Rio de Janeiro",
+   "precio": 716.0,
+   "salida": "2027-03-29",
+   "regreso": "2027-04-19"
   }
  }
 }
