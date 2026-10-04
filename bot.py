@@ -201,21 +201,34 @@ def cmd_precio(cfg, ov, args):
         return "No encontré esa ruta. Escribe /rutas para ver las disponibles."
     windows = cfg["ventanas"]
     cal_recent = [x for x in read_csv(radar.CAL_FILE, 2) if x["clave"] == r["id"]]
-    if cal_recent:
-        cal_hist = read_csv(radar.CAL_FILE, int(cfg["alertas"].get("dias_historial_calendario", 30)))
-        lines = [f"💶 <b>{html.escape(radar.route_label(r))}</b> · calendario de Google, últimas 48 h\n"]
+    ver_recent = [x for x in read_csv(GF_FILE, 2) if x["clave"] == r["id"] and x.get("precio")
+                  and x.get("tipo") in ("verificacion", "candidato", "muestra")]
+    if cal_recent or ver_recent:
+        gf30 = read_csv(GF_FILE, 30)
+        lines = [f"💶 <b>{html.escape(radar.route_label(r))}</b> · últimas 48 h\n"]
         for wid, w in windows.items():
-            rows = [x for x in cal_recent if x["ventana"] == wid]
-            if not rows:
+            rows = [x for x in ver_recent
+                    if window_of(date.fromisoformat(x["salida"]), windows,
+                                 datetime.fromisoformat(x["ts"]).astimezone(MADRID).date()) == wid]
+            crow = [x for x in cal_recent if x["ventana"] == wid]
+            if not rows and not crow:
                 continue
-            b = min(rows, key=lambda x: float(x["minimo"]))
-            d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
-            st = radar.cal_stats(cal_hist, r["id"], wid, cfg["alertas"])
-            ref = (f"\n   Lo más barato suele rondar ~{euros(st['minimo'])} · precio medio ~{euros(st['mediana'])}"
-                   if st else "")
-            lines.append(f"<b>{w['nombre']}</b>: {euros(float(b['minimo']))} ({fdate(d1)} → {fdate(d2)}){ref}")
+            if rows:
+                b = min(rows, key=lambda x: float(x["precio"]))
+                d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
+                line = f"<b>{w['nombre']}</b>: {euros(float(b['precio']))} ({fdate(d1)} → {fdate(d2)}) ✅"
+            else:
+                b = min(crow, key=lambda x: float(x["minimo"]))
+                d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
+                line = f"<b>{w['nombre']}</b>: ~{euros(float(b['minimo']))} ({fdate(d1)} → {fdate(d2)}) ⚠️ sin verificar"
+            vst = radar.verified_stats(gf30, r["id"], wid, windows, cfg["alertas"])
+            if vst:
+                line += (f"\n   Lo habitual: ~{euros(vst['habitual'])} · "
+                         f"lo más barato en 30 días: {euros(vst['minimo_historico'])}")
+            lines.append(line)
+        lines.append("\n✅ = verificado con tu equipaje, tu duración máxima y sin billetes separados")
         if r.get("precio_objetivo"):
-            lines.append(f"\n🎯 Tu objetivo: {euros(float(r['precio_objetivo']))}")
+            lines.append(f"🎯 Tu objetivo: {euros(float(r['precio_objetivo']))}")
         return "\n".join(lines)
     recent = route_prices(cfg, r["id"], 2)
     if not recent:

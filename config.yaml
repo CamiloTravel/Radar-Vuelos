@@ -87,9 +87,16 @@ calendario:
   presupuesto_maximo_por_parte: 350    # …ni sube de aquí
   max_consultas_por_ejecucion: 200     # solo si se ejecuta sin trabajos en paralelo
 
+# Verificación: las fechas más baratas del calendario se comprueban una a una en
+# Google Flights con tu equipaje, tu duración máxima y sin billetes separados
+verificacion:
+  fechas_por_ventana_prioritaria: 2   # + la mejor que incluye fin de semana (Europa)
+  fechas_por_ventana_secundaria: 1
+  intentos_maximos: 3                 # si una fecha no cumple tus reglas, prueba la siguiente
+
 google:
   activado: true
-  max_consultas_por_ejecucion: 90
+  max_consultas_por_ejecucion: 150
 
 # ------------------------------------------------------------
 # RUTAS (ida y vuelta desde Madrid)

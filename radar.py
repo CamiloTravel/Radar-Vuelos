@@ -400,8 +400,10 @@ def calendar_chunk(orig, dest, start, end, stay, profile, max_dur):
     if profile.get("equipaje_mano") or profile.get("equipaje_facturado"):
         bags = BagsFilter(checked_bags=int(profile.get("equipaje_facturado", 0)),
                           carry_on=bool(profile.get("equipaje_mano", 0)))
+    # Sin filtro de duración: con él el calendario de Google devuelve 1 solo precio y tarda
+    # 10-20 s. La duración máxima se comprueba después, en la verificación de cada fecha.
     f = DateSearchFilters(trip_type=trip, passenger_info=PassengerInfo(adults=1), flight_segments=segs,
-                          stops=MaxStops.ANY, seat_type=SeatType.ECONOMY, max_duration=max_dur,
+                          stops=MaxStops.ANY, seat_type=SeatType.ECONOMY, max_duration=None,
                           bags=bags, from_date=start.isoformat(), to_date=end.isoformat(), duration=stay)
     res = SearchDates().search(f, currency="EUR", language="es", country="ES") or []
     out = []
@@ -517,6 +519,29 @@ def load_shards():
         except Exception:
             continue
     return parts or None
+
+
+def verified_stats(gf_hist, key, wid, windows, cfg_a):
+    """Precios VERIFICADOS (tu equipaje + duración máxima + sin billetes separados) de esa
+    ruta y ventana en los últimos 30 días: mínimo de cada día → lo más barato y lo habitual."""
+    per_day = {}
+    for r in gf_hist:
+        if r["clave"] != key or r.get("tipo") not in ("verificacion", "candidato", "muestra") or not r["precio"]:
+            continue
+        try:
+            ts = datetime.fromisoformat(r["ts"])
+            if ts < NOW_UTC - timedelta(days=30):
+                continue
+            if window_of(date.fromisoformat(r["salida"]), windows, ts.astimezone(MADRID).date()) != wid:
+                continue
+        except Exception:
+            continue
+        day = r["ts"][:10]
+        per_day[day] = min(per_day.get(day, 1e9), float(r["precio"]))
+    if len(per_day) < int(cfg_a.get("min_dias_calendario", 4)):
+        return None
+    vals = list(per_day.values())
+    return {"minimo_historico": min(vals), "habitual": statistics.median(vals), "dias": len(vals)}
 
 
 def cal_stats(cal_hist, key, wid, cfg_a):
@@ -703,9 +728,10 @@ def build_message(a, cfg):
 
 def _learned_text(cfg, gf_index, cal_hist=None):
     windows, cfg_a, routes = cfg["ventanas"], cfg["alertas"], cfg.get("rutas", [])
+    gf30 = read_csv(GF_FILE, 30)
     learned = sum(1 for r in routes for wid in windows
-                  if (cal_hist and cal_stats(cal_hist, r["id"], wid, cfg_a))
-                  or window_reference(gf_index, r["id"], wid, windows, cfg_a))
+                  if verified_stats(gf30, r["id"], wid, windows, cfg_a)
+                  and (not cal_hist or cal_stats(cal_hist, r["id"], wid, cfg_a)))
     return f"🧠 Precio normal aprendido: {learned}/{len(routes) * len(windows)} combinaciones ruta-ventana"
 
 
@@ -719,6 +745,7 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
     recent = read_csv(GF_FILE, 1) + (extra_rows or [])
     cal_recent = read_csv(CAL_FILE, 1) + (cal_extra or [])
     cal_hist = read_csv(CAL_FILE, int(cfg_a.get("dias_historial_calendario", 30)))
+    gf_hist_all = read_csv(GF_FILE, 30) + (extra_rows or [])
     titulo = titulo or "☀️ <b>Resumen diario</b>"
     wids = [solo_ventana] if solo_ventana else list(windows)
     messages = []
@@ -734,24 +761,26 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
                                  ("Ida y vuelta desde otras ciudades", is_reverse)):
             tier_lines = []
             for route in [r for r in routes if in_group(r)]:
-                # 1º el calendario (todas las fechas); si no hay, las consultas sueltas
+                # 1º precios VERIFICADOS con tus reglas; si no hay, el calendario (sin verificar)
+                unverified = ""
+                rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]
+                        and r.get("tipo") in ("verificacion", "candidato", "muestra")
+                        and window_of(date.fromisoformat(r["salida"]), windows) == wid]
                 crow = [r for r in cal_recent if r["clave"] == route["id"] and r["ventana"] == wid]
-                if crow:
-                    b = min(crow, key=lambda r: float(r["minimo"]))
-                    price = float(b["minimo"])
-                    d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
-                    st = cal_stats(cal_hist, route["id"], wid, cfg_a)
-                    typ = st["minimo"] if st else None
-                else:
-                    rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]
-                            and window_of(date.fromisoformat(r["salida"]), windows) == wid]
-                    if not rows:
-                        missing.append(route_short(route))
-                        continue
+                if rows:
                     b = min(rows, key=lambda r: float(r["precio"]))
                     price = float(b["precio"])
                     d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
-                    typ = window_reference(gf_index, route["id"], wid, windows, cfg_a)
+                elif crow:
+                    b = min(crow, key=lambda r: float(r["minimo"]))
+                    price = float(b["minimo"])
+                    d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
+                    unverified = " ⚠️ sin verificar"
+                else:
+                    missing.append(route_short(route))
+                    continue
+                vst = verified_stats(gf_hist_all, route["id"], wid, windows, cfg_a)
+                typ = vst["habitual"] if vst else None
                 ref = ""
                 if typ:
                     diff = price / typ - 1
@@ -759,7 +788,7 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
                     ref = f" {arrow} suele ~{euros(typ)}"
                 tgt = f" 🎯{euros(float(route['precio_objetivo']))}" if route.get("precio_objetivo") else ""
                 tier_lines.append(f"• {html.escape(route_label(route) if is_reverse(route) else route['nombre'])}: <b>{euros(price)}</b> "
-                                  f"({fdate(d1)} → {fdate(d2)}, {(d2 - d1).days} d){ref}{tgt}")
+                                  f"({fdate(d1)} → {fdate(d2)}, {(d2 - d1).days} d){ref}{tgt}{unverified}")
             if tier_lines:
                 lines.append(f"\n<b>{tier_name}</b>")
                 lines.extend(tier_lines)
@@ -770,8 +799,9 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
     p = paused_until(cfg)
     if p:
         footer.append(f"⏸ Alertas en pausa hasta el {fdate(p.astimezone(MADRID).date())}")
-    footer.append("Precios más bajos vistos en las últimas 24 h, con tu equipaje incluido. "
-                  "🟢 barato · ⚪ normal · 🔴 caro, frente a lo más barato que suele haber en esa ventana.")
+    footer.append("Precios más bajos verificados en las últimas 24 h, con tu equipaje, tu duración máxima "
+                  "y sin billetes separados. 🟢 barato · ⚪ normal · 🔴 caro, frente al mejor precio "
+                  "verificado habitual de esa ventana.")
     messages[-1] += "\n\n" + "\n".join(footer)
     return messages
 
@@ -1055,6 +1085,7 @@ def main():
         tasks = calendar_tasks(cfg, due, run_n)
         scan = run_calendar_tasks(cfg, tasks, int(ccfg.get("max_consultas_por_ejecucion", 200)))
         scan["partes"] = 1
+    route_by_id = {r["id"]: r for r in routes}
     if scan:
         stats["cal"] = scan["consultas"]
         stats["cal_fallos"] = scan["fallos"]
@@ -1064,7 +1095,6 @@ def main():
             k = (rid, d1, d2)
             if k not in found or p < found[k]:
                 found[k] = p
-        route_by_id = {r["id"]: r for r in routes}
         for (rid, d1, d2), p in found.items():
             route = route_by_id.get(rid)
             if not route or d1 <= TODAY:
@@ -1084,84 +1114,39 @@ def main():
             f"{len(found)} combinaciones de fechas con precio"
             + (" · faltaron consultas por presupuesto" if scan["truncado"] else ""))
 
-    def cal_evaluate(route, wid, d1, d2, cal_price, st, weekend_choice):
-        """Evalúa la mejor fecha de una ventana. El precio se verifica en Google antes de avisar."""
-        profile = profiles[route["perfil"]]
-        target = route.get("precio_objetivo")
-        mejora = float(cfg_a.get("mejora_sobre_minimo_historico", 0.05))
-        kind = None
-        if st:
-            # Chollo: muy por debajo del precio medio Y más barato que lo más barato visto
-            # en los últimos 30 días. Error fare: mitad del precio medio y muy por debajo del mínimo.
-            d = 1 - cal_price / st["mediana"]
-            if d >= cfg_a["umbral_error_fare"] and cal_price <= st["minimo_historico"] * 0.80:
-                kind = "error_fare"
-            elif d >= cfg_a["umbral_chollo"] and cal_price <= st["minimo_historico"] * (1 - mejora):
-                kind = "chollo"
-        if not kind and target and cal_price <= float(target):
-            kind = "objetivo"
-        if not kind:
-            return
-        max_dur = (int(route["duracion_directo_min"] * profile.get("factor_duracion", 3))
-                   if route.get("duracion_directo_min") else None)
-        res = run_google(route["id"], route["aeropuerto"], d1, d2, profile, max_dur, "verificacion",
-                         orig=route.get("origen_aeropuerto"))
-        price, note = cal_price, None
-        if res and res["ok"] and res["price"]:
-            if res["price"] > cal_price * 1.10:
-                return  # el detalle no confirma el precio del calendario
-            price = res["price"]
-        elif res and res["ok"]:
-            return      # Google ya no encuentra ese vuelo
-        else:
-            res = {}
-            note = "Precio del calendario de Google con tu equipaje; no se pudo abrir el detalle"
-        pref = is_preferred(res.get("airlines"), preferred)
-        drop = pts = normal = None
-        if kind in ("chollo", "error_fare"):
-            drop = 1 - price / st["mediana"]
-            pts = score(max(drop, 0), res.get("stops"), pref)
-            weekend_ok = (not profile.get("fin_de_semana")) or weekend_choice
-            min_score = cfg_a["puntuacion_minima"] + (0 if weekend_ok else cfg_a["exigencia_extra_entre_semana"])
-            if kind == "chollo" and (drop < cfg_a["umbral_chollo"] or pts < min_score):
-                kind = "objetivo" if (target and price <= float(target)) else None
-            normal = st["mediana"]
-            extra = (f"Lo más barato visto en 30 días en esta ventana: {euros(st['minimo_historico'])} "
-                     f"(normalmente ~{euros(st['minimo'])})")
-            note = f"{note}. {extra}" if note else extra
-        if kind == "objetivo":
-            if price > float(target):
-                return
-            tnote = f"Tu objetivo era {euros(float(target))}"
-            note = f"{tnote}. {note}" if note else tnote
-        if not kind:
-            return
-        register({
-            "tipo": kind, "clave": route["id"], "nombre": route["nombre"], "perfil": route["perfil"],
-            "ventana": wid, "ventana_nombre": windows[wid]["nombre"],
-            "salida": d1.isoformat(), "regreso": d2.isoformat(), "precio": price,
-            "normal": normal if kind != "objetivo" else None, "caida": drop if kind != "objetivo" else None,
-            "puntuacion": pts, "aerolineas": res.get("airlines"), "preferida": pref,
-            "escalas": res.get("stops"), "vuelo": res.get("vuelo"), "url": res.get("url"),
-            "nota": note, "aeropuerto": route["aeropuerto"],
-            "origen_aeropuerto": route.get("origen_aeropuerto"), "ruta_txt": route_label(route),
-            "objetivo": float(target) if target else None,
-        })
+    # ---------- 2c. Verificación de las fechas más baratas del calendario ----------
+    # El calendario dice DÓNDE están los precios bajos; cada candidata se comprueba en Google
+    # Flights con tu equipaje, tu duración máxima y sin billetes separados. Solo los precios
+    # verificados cuentan para alertas, objetivos y resumen.
+    vcfg = cfg.get("verificacion", {})
+    verified = {}   # (ruta, ventana) -> lista de (salida, regreso, precio, resultado)
 
-    for (key, wid), lst in cal_best.items():
-        route = next(r for r in routes if r["id"] == key)
+    def verify_window(route, wid, lst, n_ok, max_tries, weekend_too):
         profile = profiles[route["perfil"]]
-        st = cal_stats(cal_hist, key, wid, cfg_a)
-        picks = [(lst[0], is_weekend_trip(lst[0][0], lst[0][1]))]
-        if profile.get("fin_de_semana"):
-            wk = next((x for x in lst if is_weekend_trip(x[0], x[1])), None)
-            if wk and wk is not lst[0]:
-                picks.append((wk, True))
-        for (d1, d2, p), wk_choice in picks:
-            cal_evaluate(route, wid, d1, d2, p, st, wk_choice)
+        max_dur = max_duration(route, profile)
+        tried, ok = set(), []
+        pools = [(lst, n_ok)]
+        if weekend_too:
+            pools.append(([x for x in lst if is_weekend_trip(x[0], x[1])], 1))
+        for pool, need in pools:
+            got = 0
+            for d1, d2, cprice in pool:
+                if got >= need or len(tried) >= max_tries or google_budget <= 0:
+                    break
+                if (d1, d2) in tried or f"{route['id']}|{d1}|{d2}" in stale:
+                    continue
+                tried.add((d1, d2))
+                res = run_google(route["id"], route["aeropuerto"], d1, d2, profile, max_dur, "verificacion",
+                                 orig=route.get("origen_aeropuerto"))
+                if res and res["ok"] and res["price"]:
+                    ok.append((d1, d2, res["price"], res))
+                    got += 1
+                elif res and res["ok"]:  # no hay vuelos que cumplan tus reglas ese día
+                    stale[f"{route['id']}|{d1}|{d2}"] = (NOW_UTC + timedelta(hours=12)).isoformat()
+            if len(tried) >= max_tries:
+                break
+        return ok
 
-    # Fechas que el radar anuncia baratas pero Google dice que no (caché desactualizada):
-    # se ignoran 24 h para no gastar consultas en ellas una y otra vez
     stale = state.setdefault("radar_obsoletos", {})
     for k in list(stale):
         try:
@@ -1169,6 +1154,72 @@ def main():
                 del stale[k]
         except Exception:
             del stale[k]
+    order = sorted(cal_best, key=lambda k: (0 if route_by_id[k[0]].get("precio_objetivo") else 1,
+                                            0 if route_by_id[k[0]].get("prioridad", "media") == "alta" else 1,
+                                            list(windows).index(k[1])))
+    for key, wid in order:
+        route = route_by_id[key]
+        high = route.get("prioridad", "media") == "alta" or route.get("precio_objetivo")
+        verified[(key, wid)] = verify_window(
+            route, wid, cal_best[(key, wid)],
+            n_ok=int(vcfg.get("fechas_por_ventana_prioritaria" if high else "fechas_por_ventana_secundaria",
+                              2 if high else 1)),
+            max_tries=int(vcfg.get("intentos_maximos", 4)),
+            weekend_too=bool(profiles[route["perfil"]].get("fin_de_semana")) and bool(high))
+    n_ver = sum(len(v) for v in verified.values())
+    log(f"Verificación: {n_ver} precios confirmados con tus reglas en {len(verified)} combinaciones ruta-ventana")
+
+    def cal_evaluate(route, wid, d1, d2, price, res, st, vst):
+        """Decide la alerta con el precio VERIFICADO.
+        Chollo: ≥25% por debajo del precio medio del mercado Y un 7% más barato que el mínimo
+        verificado de los últimos 30 días. Error fare: mitad del precio medio y muy por debajo
+        del mínimo. Objetivo: por debajo de tu precio objetivo."""
+        profile = profiles[route["perfil"]]
+        target = route.get("precio_objetivo")
+        mejora = float(cfg_a.get("mejora_sobre_minimo_historico", 0.07))
+        pref = is_preferred(res.get("airlines"), preferred)
+        kind = drop = pts = normal = note = None
+        if st and vst:
+            drop = 1 - price / st["mediana"]
+            pts = score(max(drop, 0), res.get("stops"), pref)
+            weekend_ok = (not profile.get("fin_de_semana")) or is_weekend_trip(d1, d2)
+            min_score = cfg_a["puntuacion_minima"] + (0 if weekend_ok else cfg_a["exigencia_extra_entre_semana"])
+            if drop >= cfg_a["umbral_error_fare"] and price <= vst["minimo_historico"] * 0.80:
+                kind = "error_fare"
+            elif (drop >= cfg_a["umbral_chollo"] and price <= vst["minimo_historico"] * (1 - mejora)
+                  and pts >= min_score):
+                kind = "chollo"
+            if kind:
+                normal = st["mediana"]
+                note = (f"Lo más barato verificado en 30 días en esta ventana: {euros(vst['minimo_historico'])} "
+                        f"(normalmente ~{euros(vst['habitual'])})")
+        if not kind and target and price <= float(target):
+            kind, drop, normal = "objetivo", None, None
+            note = f"Tu objetivo era {euros(float(target))}"
+        if not kind:
+            return
+        register({
+            "tipo": kind, "clave": route["id"], "nombre": route["nombre"], "perfil": route["perfil"],
+            "ventana": wid, "ventana_nombre": windows[wid]["nombre"],
+            "salida": d1.isoformat(), "regreso": d2.isoformat(), "precio": price,
+            "normal": normal, "caida": drop if kind != "objetivo" else None,
+            "puntuacion": pts if kind != "objetivo" else None, "aerolineas": res.get("airlines"),
+            "preferida": pref, "escalas": res.get("stops"), "vuelo": res.get("vuelo"), "url": res.get("url"),
+            "nota": note, "aeropuerto": route["aeropuerto"],
+            "origen_aeropuerto": route.get("origen_aeropuerto"), "ruta_txt": route_label(route),
+            "objetivo": float(target) if target else None,
+        })
+
+    for (key, wid), lst in verified.items():
+        if not lst:
+            continue
+        route = route_by_id[key]
+        st = cal_stats(cal_hist, key, wid, cfg_a)
+        vst = verified_stats(gf_hist, key, wid, windows, cfg_a)
+        for d1, d2, price, res in sorted(lst, key=lambda x: x[2]):
+            cal_evaluate(route, wid, d1, d2, price, res, st, vst)
+
+    # (las fechas obsoletas del radar se gestionan en "stale", definido arriba)
 
     # ---------- 3. Plan de consultas a Google (reparto justo) ----------
     # Una cola por (prioridad, ventana). Dentro de cada cola: primero la oferta más barata
