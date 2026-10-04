@@ -1,47 +1,88 @@
 name: Radar de vuelos
- 
+
 on:
   schedule:
-    - cron: "17 */3 * * *"   # cada 3 horas (minuto 17 para evitar horas punta de GitHub)
-  workflow_dispatch:          # botón para ejecutarlo a mano
- 
+    - cron: "17 */3 * * *"   # cada 3 horas
+  workflow_dispatch:
+
 permissions:
   contents: write
- 
+
 concurrency:
   group: radar-vuelos
   cancel-in-progress: false
- 
+
 jobs:
-  radar:
+  # 1) Cuatro trabajos en paralelo, cada uno en una máquina distinta,
+  #    barren el calendario de precios de Google (una cuarta parte cada uno)
+  barrido:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        parte: [0, 1, 2, 3]
     steps:
       - uses: actions/checkout@v5
- 
+
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
- 
+
       - name: Instalar dependencias
         run: pip install -r requirements.txt
- 
-      - name: Buscar vuelos
+
+      - name: Barrer calendario (parte ${{ matrix.parte }})
+        run: python radar.py --barrido ${{ matrix.parte }} --partes 4
+
+      - name: Entregar resultados
+        uses: actions/upload-artifact@v4
+        with:
+          name: barrido-${{ matrix.parte }}
+          path: data/parcial/
+          if-no-files-found: ignore
+          retention-days: 1
+
+  # 2) Un trabajo final junta los resultados, analiza, te avisa y guarda el historial
+  analisis:
+    needs: barrido
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Recoger resultados de los barridos
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: barrido-*
+          path: data/parcial
+          merge-multiple: true
+
+      - name: Analizar y avisar
         env:
           TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python radar.py
- 
+
       - name: Guardar historial
         if: always()
         run: |
           git config user.name "radar-bot"
           git config user.email "radar-bot@users.noreply.github.com"
-          git add data/
+          git add data/*.csv data/*.json
           git diff --cached --quiet && exit 0
           git commit -m "Precios $(date -u +'%Y-%m-%d %H:%M') UTC"
           for i in 1 2 3 4 5; do git pull --rebase && git push && exit 0; sleep 10; done
           exit 1
- 
