@@ -200,6 +200,23 @@ def cmd_precio(cfg, ov, args):
     if not r:
         return "No encontré esa ruta. Escribe /rutas para ver las disponibles."
     windows = cfg["ventanas"]
+    cal_recent = [x for x in read_csv(radar.CAL_FILE, 2) if x["clave"] == r["id"]]
+    if cal_recent:
+        cal_hist = read_csv(radar.CAL_FILE, int(cfg["alertas"].get("dias_historial_calendario", 30)))
+        lines = [f"💶 <b>{html.escape(radar.route_label(r))}</b> · calendario de Google, últimas 48 h\n"]
+        for wid, w in windows.items():
+            rows = [x for x in cal_recent if x["ventana"] == wid]
+            if not rows:
+                continue
+            b = min(rows, key=lambda x: float(x["minimo"]))
+            d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
+            st = radar.cal_stats(cal_hist, r["id"], wid, cfg["alertas"])
+            ref = (f"\n   Lo más barato suele rondar ~{euros(st['minimo'])} · precio medio ~{euros(st['mediana'])}"
+                   if st else "")
+            lines.append(f"<b>{w['nombre']}</b>: {euros(float(b['minimo']))} ({fdate(d1)} → {fdate(d2)}){ref}")
+        if r.get("precio_objetivo"):
+            lines.append(f"\n🎯 Tu objetivo: {euros(float(r['precio_objetivo']))}")
+        return "\n".join(lines)
     recent = route_prices(cfg, r["id"], 2)
     if not recent:
         return f"Aún no tengo precios recientes de {html.escape(r['nombre'])}. Prueba con /buscar."
@@ -293,7 +310,8 @@ def cmd_sugerir(cfg, ov, args):
     r = find_route(cfg, args)
     if not r:
         return "No encontré esa ruta."
-    prices = sorted(unique_prices(gf_index_for(cfg, 30), r["id"], cfg["ventanas"]))
+    cal = [float(x["minimo"]) for x in read_csv(radar.CAL_FILE, 30) if x["clave"] == r["id"]]
+    prices = sorted(cal) if len(cal) >= 20 else sorted(unique_prices(gf_index_for(cfg, 30), r["id"], cfg["ventanas"]))
     if len(prices) < 20:
         return (f"Aún tengo pocos datos de {html.escape(r['nombre'])} ({len(prices)} precios). "
                 "Pregúntame de nuevo en unos días.")
@@ -397,7 +415,11 @@ def cmd_estado(cfg, ov, args):
     if last:
         t = datetime.fromisoformat(last["fecha"]).astimezone(MADRID)
         lines.append(f"• Última búsqueda: {fdate(t.date())} a las {t:%H:%M}")
-        lines.append(f"• Consultas a Google: {last['google_ok']} correctas, {last['google_fallos']} fallidas")
+        lines.append(f"• Calendario: {last.get('calendario_consultas', 0)} consultas "
+                     f"({last.get('calendario_fallos', 0)} fallidas), {last.get('calendario_rutas', 0)} rutas cubiertas")
+        if last.get("calendario_presupuesto"):
+            lines.append(f"• Presupuesto actual: {last['calendario_presupuesto']} consultas por cada uno de los 4 trabajos")
+        lines.append(f"• Consultas detalladas a Google: {last['google_ok']} correctas, {last['google_fallos']} fallidas")
     lines.append(f"• Rutas vigiladas: {len(cfg['rutas'])}")
     p = radar.paused_until(cfg)
     lines.append(f"• Alertas: {'en pausa' if p else 'activas'}")
@@ -417,8 +439,10 @@ def cmd_compre(cfg, ov, args):
         return "No encontré esa ruta."
     windows = cfg["ventanas"]
     wid = window_of(dep, windows) if dep else None
-    vals = unique_prices(gf_index_for(cfg, 30), r["id"], windows, wid)
-    normal = statistics.median(vals) if len(vals) >= 10 else None
+    cal = [float(x["mediana"]) for x in read_csv(radar.CAL_FILE, 30)
+           if x["clave"] == r["id"] and (not wid or x["ventana"] == wid)]
+    vals = cal if len(cal) >= 5 else unique_prices(gf_index_for(cfg, 30), r["id"], windows, wid)
+    normal = statistics.median(vals) if len(vals) >= (5 if cal else 10) else None
     ahorro = round(normal - price, 2) if normal else None
     new = not COMPRAS_FILE.exists()
     with open(COMPRAS_FILE, "a", newline="", encoding="utf-8") as f:

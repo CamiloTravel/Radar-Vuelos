@@ -64,6 +64,11 @@ DIAS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
 
 TP_FIELDS = ["ts", "clave", "mes_salida", "n", "minimo", "mediana"]
 GF_FIELDS = ["ts", "clave", "tipo", "salida", "regreso", "precio"]
+CAL_FILE = DATA / "historial_calendario.csv"   # Resumen del calendario de precios de Google
+CAL_FIELDS = ["ts", "clave", "ventana", "n", "minimo", "p10", "mediana", "mejor_salida", "mejor_regreso"]
+CAL_MAX_DIAS = 305      # Google no da precios de calendario más allá de ~305 días
+PARCIAL_DIR = DATA / "parcial"   # Resultados de los barridos en paralelo (no se guardan en el repositorio)
+CAL_TRAMO = 61          # Días por consulta de calendario
 
 
 def log(msg):
@@ -209,7 +214,9 @@ def window_of(dep, windows, ref=None):
 
 
 def is_weekend_trip(dep, ret):
-    return dep.weekday() == 4 and ret.weekday() == 0 and (ret - dep).days == 3
+    """Viaje que aprovecha un fin de semana: sale jueves, viernes o sábado y vuelve
+    domingo, lunes o martes (como máximo 5 días). Pide pocos días de vacaciones."""
+    return dep.weekday() in (3, 4, 5) and ret.weekday() in (6, 0, 1) and 1 <= (ret - dep).days <= 5
 
 
 def in_quiet_hours(cfg_a):
@@ -377,6 +384,159 @@ def google_price(cfg, orig, dest, dep, ret, profile, max_dur):
 
 
 # ------------------------------------------------------------------
+# Calendario de precios de Google (todas las fechas de un tramo de una vez)
+# ------------------------------------------------------------------
+def calendar_chunk(orig, dest, start, end, stay, profile, max_dur):
+    """Precio ida y vuelta (con tu equipaje) para cada fecha de salida entre start y end,
+    con una estancia fija de `stay` días. Devuelve lista de (salida, regreso, precio)."""
+    from fli.core import build_date_search_segments
+    from fli.models import (Airport, BagsFilter, DateSearchFilters, MaxStops,
+                            PassengerInfo, SeatType)
+    from fli.search import SearchDates
+
+    segs, trip = build_date_search_segments(Airport[orig], Airport[dest], start.isoformat(),
+                                            trip_duration=stay, is_round_trip=True)
+    bags = None
+    if profile.get("equipaje_mano") or profile.get("equipaje_facturado"):
+        bags = BagsFilter(checked_bags=int(profile.get("equipaje_facturado", 0)),
+                          carry_on=bool(profile.get("equipaje_mano", 0)))
+    f = DateSearchFilters(trip_type=trip, passenger_info=PassengerInfo(adults=1), flight_segments=segs,
+                          stops=MaxStops.ANY, seat_type=SeatType.ECONOMY, max_duration=max_dur,
+                          bags=bags, from_date=start.isoformat(), to_date=end.isoformat(), duration=stay)
+    res = SearchDates().search(f, currency="EUR", language="es", country="ES") or []
+    out = []
+    for dp in res:
+        if dp.currency and dp.currency.upper() != "EUR":
+            continue
+        try:
+            d1 = dp.date[0].date()
+            d2 = dp.date[1].date() if len(dp.date) > 1 else d1 + timedelta(days=stay)
+        except Exception:
+            continue
+        if start <= d1 <= end and dp.price and dp.price > 0:
+            out.append((d1, d2, float(dp.price)))
+    return out
+
+
+def due_windows(cfg):
+    """Ventanas que tocan en esta franja de 3 horas."""
+    slot = NOW_UTC.hour // 3
+    return [wid for wid, w in cfg["ventanas"].items()
+            if FORCE_ALL or slot % max(int(w.get("cada_horas", 3)) // 3, 1) == 0]
+
+
+def stays_for_run(profile, run_n):
+    """Estancias a barrer: las fijas en cada ejecución y, además, una rotativa."""
+    lo, hi = profile["estancia_dias"]
+    base = profile.get("estancias_calendario") or list(range(lo, hi + 1))
+    rot = profile.get("estancias_rotativas") or []
+    return sorted(set(base) | ({rot[run_n % len(rot)]} if rot else set()))
+
+
+def max_duration(route, profile):
+    return (int(route["duracion_directo_min"] * profile.get("factor_duracion", 3))
+            if route.get("duracion_directo_min") else None)
+
+
+def calendar_tasks(cfg, due, run_n):
+    """Lista ordenada de consultas de calendario: primero rutas con objetivo, luego
+    prioritarias y después secundarias. Cada consulta = ruta + estancia + tramo de 61 días."""
+    windows, profiles = cfg["ventanas"], cfg["perfiles"]
+    routes = cfg.get("rutas", [])
+    origin_ap = cfg["origen"]["aeropuerto"]
+    ordered = sorted(routes, key=lambda r: (0 if r.get("precio_objetivo") else 1,
+                                            0 if r.get("prioridad", "media") == "alta" else 1,
+                                            (routes.index(r) - run_n) % max(len(routes), 1)))
+    tasks = []
+    for route in ordered:
+        profile = profiles[route["perfil"]]
+        wids = list(windows) if route.get("precio_objetivo") else list(due)
+        start = TODAY + timedelta(days=min(windows[w]["desde_dias"] for w in wids))
+        end = min(TODAY + timedelta(days=max(windows[w]["hasta_dias"] for w in wids)),
+                  TODAY + timedelta(days=CAL_MAX_DIAS))
+        for stay in stays_for_run(profile, run_n):
+            cur = start
+            while cur <= end:
+                chunk_end = min(cur + timedelta(days=CAL_TRAMO - 1), end)
+                tasks.append({"ruta": route["id"], "orig": route.get("origen_aeropuerto") or origin_ap,
+                              "dest": route["aeropuerto"], "desde": cur, "hasta": chunk_end,
+                              "estancia": stay, "perfil": route["perfil"],
+                              "max_dur": max_duration(route, profile)})
+                cur = chunk_end + timedelta(days=1)
+    return tasks
+
+
+def run_calendar_tasks(cfg, tasks, budget):
+    """Ejecuta consultas de calendario. Se detiene si Google falla 6 veces seguidas."""
+    results, calls, fails, consecutive = [], 0, 0, 0
+    for t in tasks[:budget]:
+        if consecutive >= 6:
+            log("  El calendario de Google no responde: detengo el barrido")
+            break
+        calls += 1
+        try:
+            for d1, d2, p in calendar_chunk(t["orig"], t["dest"], t["desde"], t["hasta"], t["estancia"],
+                                            cfg["perfiles"][t["perfil"]], t["max_dur"]):
+                results.append([t["ruta"], d1.isoformat(), d2.isoformat(), p])
+            consecutive = 0
+        except Exception as e:
+            fails += 1
+            consecutive += 1
+            log(f"  Calendario falló ({type(e).__name__}) en {t['ruta']}")
+        time.sleep(random.uniform(1.0, 2.5))
+    return {"resultados": results, "consultas": calls, "fallos": fails,
+            "planificadas": len(tasks), "truncado": len(tasks) > budget}
+
+
+def run_shard(part, parts):
+    """Modo trabajo en paralelo: barre su parte de las consultas y guarda el resultado."""
+    cfg = load_config()
+    state = load_state()
+    run_n = int(state.get("ejecuciones", 0))
+    due = due_windows(cfg)
+    ccfg = cfg.get("calendario", {})
+    budget = int(state.get("calendario_presupuesto", ccfg.get("presupuesto_inicial_por_parte", 150)))
+    tasks = calendar_tasks(cfg, due, run_n)[part::parts]
+    log(f"Parte {part + 1}/{parts}: {len(tasks)} consultas planificadas, presupuesto {budget}")
+    out = run_calendar_tasks(cfg, tasks, budget)
+    out.update({"ts": NOW_ISO, "due": due, "parte": part})
+    PARCIAL_DIR.mkdir(parents=True, exist_ok=True)
+    (PARCIAL_DIR / f"barrido_{part}.json").write_text(json.dumps(out), encoding="utf-8")
+    log(f"Parte {part + 1}: {out['consultas']} consultas, {out['fallos']} fallos, "
+        f"{len(out['resultados'])} precios")
+
+
+def load_shards():
+    """Junta los resultados de los trabajos en paralelo (si los hay)."""
+    if not PARCIAL_DIR.exists():
+        return None
+    parts = []
+    for f in sorted(PARCIAL_DIR.glob("barrido_*.json")):
+        try:
+            parts.append(json.loads(f.read_text(encoding="utf-8")))
+        except Exception:
+            continue
+    return parts or None
+
+
+def cal_stats(cal_hist, key, wid, cfg_a):
+    """Lo habitual en esa ruta y ventana según los barridos de calendario anteriores:
+    mediana = precio medio de las fechas · minimo = lo más barato que suele haber."""
+    rows = [r for r in cal_hist if r["clave"] == key and r["ventana"] == wid]
+    if len(rows) < int(cfg_a.get("min_barridos", 8)):
+        return None
+    days = {r["ts"][:10] for r in rows}
+    if len(days) < int(cfg_a.get("min_dias_calendario", 4)):
+        return None
+    try:
+        return {"mediana": statistics.median(float(r["mediana"]) for r in rows),
+                "minimo": statistics.median(float(r["minimo"]) for r in rows),
+                "minimo_historico": min(float(r["minimo"]) for r in rows), "n": len(rows)}
+    except Exception:
+        return None
+
+
+# ------------------------------------------------------------------
 # Precio normal y puntuación
 # ------------------------------------------------------------------
 TOLERANCIA_DEFECTO = {"ultimo_minuto": 3, "corto": 10, "medio": 25, "largo": 45}
@@ -511,7 +671,7 @@ def build_message(a, cfg):
         lines.append(f"💶 <b>{euros(a['precio'])}</b> ida y vuelta (⚠️ equipaje no incluido, verifícalo)")
     if a.get("caida") is not None and a.get("normal"):
         lines.append(f"📉 {a['caida']:.0%} por debajo de lo normal (~{euros(a['normal'])})")
-    tag = " · viernes → lunes" if is_weekend_trip(dep, ret) else ""
+    tag = " · incluye fin de semana" if is_weekend_trip(dep, ret) else ""
     lines.append(f"📅 {fdate(dep)} → {fdate(ret)} ({(ret - dep).days} días{tag})")
     v = a.get("vuelo")
     if v:
@@ -541,14 +701,15 @@ def build_message(a, cfg):
     return "\n".join(lines)
 
 
-def _learned_text(cfg, gf_index):
+def _learned_text(cfg, gf_index, cal_hist=None):
     windows, cfg_a, routes = cfg["ventanas"], cfg["alertas"], cfg.get("rutas", [])
     learned = sum(1 for r in routes for wid in windows
-                  if window_reference(gf_index, r["id"], wid, windows, cfg_a))
+                  if (cal_hist and cal_stats(cal_hist, r["id"], wid, cfg_a))
+                  or window_reference(gf_index, r["id"], wid, windows, cfg_a))
     return f"🧠 Precio normal aprendido: {learned}/{len(routes) * len(windows)} combinaciones ruta-ventana"
 
 
-def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_ventana=None):
+def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_ventana=None, cal_extra=None):
     """Resumen de las últimas 24 h: un mensaje por ventana de antelación."""
     windows = cfg["ventanas"]
     cfg_a = cfg["alertas"]
@@ -556,6 +717,8 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
     if gf_index is None:
         gf_index = build_gf_index(read_csv(GF_FILE, cfg_a["dias_historial"]), windows)
     recent = read_csv(GF_FILE, 1) + (extra_rows or [])
+    cal_recent = read_csv(CAL_FILE, 1) + (cal_extra or [])
+    cal_hist = read_csv(CAL_FILE, int(cfg_a.get("dias_historial_calendario", 30)))
     titulo = titulo or "☀️ <b>Resumen diario</b>"
     wids = [solo_ventana] if solo_ventana else list(windows)
     messages = []
@@ -571,35 +734,44 @@ def summary_messages(cfg, extra_rows=None, gf_index=None, titulo=None, solo_vent
                                  ("Ida y vuelta desde otras ciudades", is_reverse)):
             tier_lines = []
             for route in [r for r in routes if in_group(r)]:
-                rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]
-                        and window_of(date.fromisoformat(r["salida"]), windows) == wid]
-                if not rows:
-                    missing.append(route_short(route))
-                    continue
-                b = min(rows, key=lambda r: float(r["precio"]))
-                price = float(b["precio"])
-                d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
-                typ = window_reference(gf_index, route["id"], wid, windows, cfg_a)
+                # 1º el calendario (todas las fechas); si no hay, las consultas sueltas
+                crow = [r for r in cal_recent if r["clave"] == route["id"] and r["ventana"] == wid]
+                if crow:
+                    b = min(crow, key=lambda r: float(r["minimo"]))
+                    price = float(b["minimo"])
+                    d1, d2 = date.fromisoformat(b["mejor_salida"]), date.fromisoformat(b["mejor_regreso"])
+                    st = cal_stats(cal_hist, route["id"], wid, cfg_a)
+                    typ = st["minimo"] if st else None
+                else:
+                    rows = [r for r in recent if r["clave"] == route["id"] and r["precio"]
+                            and window_of(date.fromisoformat(r["salida"]), windows) == wid]
+                    if not rows:
+                        missing.append(route_short(route))
+                        continue
+                    b = min(rows, key=lambda r: float(r["precio"]))
+                    price = float(b["precio"])
+                    d1, d2 = date.fromisoformat(b["salida"]), date.fromisoformat(b["regreso"])
+                    typ = window_reference(gf_index, route["id"], wid, windows, cfg_a)
                 ref = ""
                 if typ:
                     diff = price / typ - 1
                     arrow = "🟢" if diff <= -0.10 else "🔴" if diff >= 0.10 else "⚪"
-                    ref = f" {arrow} habitual ~{euros(typ)}"
+                    ref = f" {arrow} suele ~{euros(typ)}"
                 tgt = f" 🎯{euros(float(route['precio_objetivo']))}" if route.get("precio_objetivo") else ""
                 tier_lines.append(f"• {html.escape(route_label(route) if is_reverse(route) else route['nombre'])}: <b>{euros(price)}</b> "
-                                  f"({fdate(d1)} → {fdate(d2)}){ref}{tgt}")
+                                  f"({fdate(d1)} → {fdate(d2)}, {(d2 - d1).days} d){ref}{tgt}")
             if tier_lines:
                 lines.append(f"\n<b>{tier_name}</b>")
                 lines.extend(tier_lines)
         if missing:
             lines.append(f"\n<i>Sin datos hoy: {html.escape(', '.join(missing))}</i>")
         messages.append("\n".join(lines))
-    footer = [_learned_text(cfg, gf_index)]
+    footer = [_learned_text(cfg, gf_index, cal_hist)]
     p = paused_until(cfg)
     if p:
         footer.append(f"⏸ Alertas en pausa hasta el {fdate(p.astimezone(MADRID).date())}")
     footer.append("Precios más bajos vistos en las últimas 24 h, con tu equipaje incluido. "
-                  "🟢 barato · ⚪ normal · 🔴 caro, frente al precio habitual de la ventana.")
+                  "🟢 barato · ⚪ normal · 🔴 caro, frente a lo más barato que suele haber en esa ventana.")
     messages[-1] += "\n\n" + "\n".join(footer)
     return messages
 
@@ -675,9 +847,10 @@ def main():
             state["v2_avisado"] = True
 
     quiet = in_quiet_hours(cfg_a)
-    slot = NOW_UTC.hour // 3
-    due = [wid for wid, w in windows.items()
-           if FORCE_ALL or slot % max(int(w.get("cada_horas", 3)) // 3, 1) == 0]
+    shards = load_shards()
+    due = due_windows(cfg)
+    if shards:  # usar las mismas ventanas que barrieron los trabajos en paralelo
+        due = [w for w in windows if any(w in p.get("due", []) for p in shards)] or due
     log(f"Ventanas en esta ejecución: {', '.join(windows[w]['nombre'] for w in due)}"
         + (" · horas de silencio" if quiet else ""))
 
@@ -691,6 +864,8 @@ def main():
     tp_hist = read_csv(TP_FILE, cfg_a["dias_historial"])
     gf_hist = read_csv(GF_FILE, cfg_a["dias_historial"])
     gf_index = build_gf_index(gf_hist, windows)
+    cal_hist = read_csv(CAL_FILE, int(cfg_a.get("dias_historial_calendario", 30)))
+    cal_rows = []
     tp_rows, gf_rows = [], []
     latest = {"actualizado": NOW_ISO, "rutas": {}, "exploracion": {}}
     outgoing = []  # alertas listas para enviar
@@ -853,6 +1028,138 @@ def main():
             f"{windows[w]['nombre']} {len(l)}" for w, l in by_w.items()) if by_w
             else f"Radar {route['nombre']}: sin datos en caché")
 
+    # ---------- 2b. Barrido de calendario de Google ----------
+    # Para cada ruta y estancia, una consulta devuelve el precio (con tu equipaje) de TODAS
+    # las fechas de salida en un tramo de 61 días. Normalmente lo hacen 4 trabajos en paralelo
+    # (cada uno en una máquina distinta) y aquí solo se juntan los resultados.
+    ccfg = cfg.get("calendario", {})
+    cal_on = bool(ccfg.get("activado", True))
+    cal_done = set()          # (ruta, ventana) cubiertas por el calendario en esta ejecución
+    cal_best = {}             # (ruta, ventana) -> lista de (salida, regreso, precio)
+    scan = None
+    if cal_on and shards:
+        scan = {"resultados": [x for p in shards for x in p.get("resultados", [])],
+                "consultas": sum(p.get("consultas", 0) for p in shards),
+                "fallos": sum(p.get("fallos", 0) for p in shards),
+                "planificadas": sum(p.get("planificadas", 0) for p in shards),
+                "truncado": any(p.get("truncado") for p in shards), "partes": len(shards)}
+        # Escalado automático: más consultas mientras Google responda bien, menos si falla
+        budget = int(state.get("calendario_presupuesto", ccfg.get("presupuesto_inicial_por_parte", 150)))
+        rate = scan["fallos"] / scan["consultas"] if scan["consultas"] else 0
+        if rate > 0.10:
+            budget = max(int(ccfg.get("presupuesto_minimo_por_parte", 60)), int(budget * 0.75))
+        elif scan["truncado"] and rate < 0.02:
+            budget = min(int(ccfg.get("presupuesto_maximo_por_parte", 350)), int(budget * 1.10) + 5)
+        state["calendario_presupuesto"] = budget
+    elif cal_on:  # sin trabajos en paralelo: barrido en este mismo proceso
+        tasks = calendar_tasks(cfg, due, run_n)
+        scan = run_calendar_tasks(cfg, tasks, int(ccfg.get("max_consultas_por_ejecucion", 200)))
+        scan["partes"] = 1
+    if scan:
+        stats["cal"] = scan["consultas"]
+        stats["cal_fallos"] = scan["fallos"]
+        found = {}
+        for rid, s1, s2, p in scan["resultados"]:
+            d1, d2 = date.fromisoformat(s1), date.fromisoformat(s2)
+            k = (rid, d1, d2)
+            if k not in found or p < found[k]:
+                found[k] = p
+        route_by_id = {r["id"]: r for r in routes}
+        for (rid, d1, d2), p in found.items():
+            route = route_by_id.get(rid)
+            if not route or d1 <= TODAY:
+                continue
+            wid = window_of(d1, windows)
+            if wid and (wid in due or route.get("precio_objetivo")):
+                cal_best.setdefault((rid, wid), []).append((d1, d2, p))
+        for (rid, wid), lst in cal_best.items():
+            cal_done.add((rid, wid))
+            lst.sort(key=lambda x: x[2])
+            prices = [p for _, _, p in lst]
+            cal_rows.append({"ts": NOW_ISO, "clave": rid, "ventana": wid, "n": len(prices),
+                             "minimo": prices[0], "p10": prices[int(len(prices) * 0.1)],
+                             "mediana": statistics.median(prices),
+                             "mejor_salida": lst[0][0].isoformat(), "mejor_regreso": lst[0][1].isoformat()})
+        log(f"Calendario: {scan['consultas']} consultas en {scan['partes']} parte(s), {scan['fallos']} fallos, "
+            f"{len(found)} combinaciones de fechas con precio"
+            + (" · faltaron consultas por presupuesto" if scan["truncado"] else ""))
+
+    def cal_evaluate(route, wid, d1, d2, cal_price, st, weekend_choice):
+        """Evalúa la mejor fecha de una ventana. El precio se verifica en Google antes de avisar."""
+        profile = profiles[route["perfil"]]
+        target = route.get("precio_objetivo")
+        mejora = float(cfg_a.get("mejora_sobre_minimo_historico", 0.05))
+        kind = None
+        if st:
+            # Chollo: muy por debajo del precio medio Y más barato que lo más barato visto
+            # en los últimos 30 días. Error fare: mitad del precio medio y muy por debajo del mínimo.
+            d = 1 - cal_price / st["mediana"]
+            if d >= cfg_a["umbral_error_fare"] and cal_price <= st["minimo_historico"] * 0.80:
+                kind = "error_fare"
+            elif d >= cfg_a["umbral_chollo"] and cal_price <= st["minimo_historico"] * (1 - mejora):
+                kind = "chollo"
+        if not kind and target and cal_price <= float(target):
+            kind = "objetivo"
+        if not kind:
+            return
+        max_dur = (int(route["duracion_directo_min"] * profile.get("factor_duracion", 3))
+                   if route.get("duracion_directo_min") else None)
+        res = run_google(route["id"], route["aeropuerto"], d1, d2, profile, max_dur, "verificacion",
+                         orig=route.get("origen_aeropuerto"))
+        price, note = cal_price, None
+        if res and res["ok"] and res["price"]:
+            if res["price"] > cal_price * 1.10:
+                return  # el detalle no confirma el precio del calendario
+            price = res["price"]
+        elif res and res["ok"]:
+            return      # Google ya no encuentra ese vuelo
+        else:
+            res = {}
+            note = "Precio del calendario de Google con tu equipaje; no se pudo abrir el detalle"
+        pref = is_preferred(res.get("airlines"), preferred)
+        drop = pts = normal = None
+        if kind in ("chollo", "error_fare"):
+            drop = 1 - price / st["mediana"]
+            pts = score(max(drop, 0), res.get("stops"), pref)
+            weekend_ok = (not profile.get("fin_de_semana")) or weekend_choice
+            min_score = cfg_a["puntuacion_minima"] + (0 if weekend_ok else cfg_a["exigencia_extra_entre_semana"])
+            if kind == "chollo" and (drop < cfg_a["umbral_chollo"] or pts < min_score):
+                kind = "objetivo" if (target and price <= float(target)) else None
+            normal = st["mediana"]
+            extra = (f"Lo más barato visto en 30 días en esta ventana: {euros(st['minimo_historico'])} "
+                     f"(normalmente ~{euros(st['minimo'])})")
+            note = f"{note}. {extra}" if note else extra
+        if kind == "objetivo":
+            if price > float(target):
+                return
+            tnote = f"Tu objetivo era {euros(float(target))}"
+            note = f"{tnote}. {note}" if note else tnote
+        if not kind:
+            return
+        register({
+            "tipo": kind, "clave": route["id"], "nombre": route["nombre"], "perfil": route["perfil"],
+            "ventana": wid, "ventana_nombre": windows[wid]["nombre"],
+            "salida": d1.isoformat(), "regreso": d2.isoformat(), "precio": price,
+            "normal": normal if kind != "objetivo" else None, "caida": drop if kind != "objetivo" else None,
+            "puntuacion": pts, "aerolineas": res.get("airlines"), "preferida": pref,
+            "escalas": res.get("stops"), "vuelo": res.get("vuelo"), "url": res.get("url"),
+            "nota": note, "aeropuerto": route["aeropuerto"],
+            "origen_aeropuerto": route.get("origen_aeropuerto"), "ruta_txt": route_label(route),
+            "objetivo": float(target) if target else None,
+        })
+
+    for (key, wid), lst in cal_best.items():
+        route = next(r for r in routes if r["id"] == key)
+        profile = profiles[route["perfil"]]
+        st = cal_stats(cal_hist, key, wid, cfg_a)
+        picks = [(lst[0], is_weekend_trip(lst[0][0], lst[0][1]))]
+        if profile.get("fin_de_semana"):
+            wk = next((x for x in lst if is_weekend_trip(x[0], x[1])), None)
+            if wk and wk is not lst[0]:
+                picks.append((wk, True))
+        for (d1, d2, p), wk_choice in picks:
+            cal_evaluate(route, wid, d1, d2, p, st, wk_choice)
+
     # Fechas que el radar anuncia baratas pero Google dice que no (caché desactualizada):
     # se ignoran 24 h para no gastar consultas en ellas una y otra vez
     stale = state.setdefault("radar_obsoletos", {})
@@ -915,8 +1222,10 @@ def main():
             for o in near:
                 target_tasks.append((route, wid, "candidato", o["dep"], o["ret"], o))
     planned = {(t[0]["id"], t[3], t[4]) for t in target_tasks}
+    target_tasks = [t for t in target_tasks if (t[0]["id"], t[1]) not in cal_done]
     for k in ordered:
-        ordered[k] = [t for t in ordered[k] if (t[0]["id"], t[3], t[4]) not in planned]
+        ordered[k] = [t for t in ordered[k] if (t[0]["id"], t[3], t[4]) not in planned
+                      and (t[0]["id"], t[1]) not in cal_done]
     if target_tasks:
         log(f"Búsqueda de objetivos: {len(target_tasks)} fechas cerca de tus precios objetivo")
     total_planned = sum(len(v) for v in ordered.values())
@@ -961,6 +1270,11 @@ def main():
                           "verificado": False, "aeropuerto": route["aeropuerto"]})
 
     for route in routes:
+        latest.setdefault("calendario", {})[route["id"]] = {
+            wid: {"precio": cal_best[(route["id"], wid)][0][2],
+                  "salida": cal_best[(route["id"], wid)][0][0].isoformat(),
+                  "regreso": cal_best[(route["id"], wid)][0][1].isoformat()}
+            for wid in windows if (route["id"], wid) in cal_best}
         latest["rutas"][route["id"]] = {
             "nombre": route["nombre"], "prioridad": route.get("prioridad"),
             "ventanas": {wid: best_seen.get((route["id"], wid)) for wid in due},
@@ -1021,9 +1335,7 @@ def main():
                              escalas=res.get("stops"), vuelo=res.get("vuelo"),
                              preferida=is_preferred(res.get("airlines"), preferred))
                 register(alert)
-            elif res is None or not res["ok"]:
-                alert.update(verificado=False, normal=base, caida=d)
-                register(alert)
+            # sin verificación en Google no se avisa: la caché del radar puede estar desactualizada
 
     # ---------- 5. Enviar alertas: una por ruta, la mejor ----------
     order = {"error_fare": 0, "objetivo": 1, "chollo": 2}
@@ -1035,6 +1347,14 @@ def main():
                 del cooldown[k]
         except Exception:
             del cooldown[k]
+    target_cool = state.setdefault("ultimo_aviso_objetivo", {})
+    horas_obj = float(cfg_a.get("repetir_objetivo_cada_horas", 72))
+    for k in list(target_cool):
+        try:
+            if NOW_UTC - datetime.fromisoformat(target_cool[k]["fecha"]) > timedelta(hours=horas_obj):
+                del target_cool[k]
+        except Exception:
+            del target_cool[k]
     groups = {}
     for a in outgoing:
         groups.setdefault(a["clave"], []).append(a)
@@ -1045,6 +1365,8 @@ def main():
         # precio mejora de forma clara o si ahora es un error fare
         upgrade = best["tipo"] == "error_fare" and prev and prev.get("tipo") != "error_fare"
         mejora = float(cfg_a.get("mejora_minima_para_repetir", 0.10))
+        if not prev and best["tipo"] == "objetivo":
+            prev = target_cool.get(key)   # objetivos: no repetir durante varios días
         if prev and not upgrade and best["precio"] > prev["precio"] * (1 - mejora):
             continue
         targets_met = [a for a in group if a["tipo"] == "objetivo" or
@@ -1061,13 +1383,15 @@ def main():
         if telegram(build_message(best, cfg)):
             stats["alertas"] += 1
             cooldown[key] = {"precio": best["precio"], "fecha": NOW_ISO, "tipo": best["tipo"]}
+            if best["tipo"] == "objetivo":
+                target_cool[key] = {"precio": best["precio"], "fecha": NOW_ISO}
         time.sleep(1)
 
     # ---------- 6. Resumen diario ----------
     hour = cfg_a.get("resumen_diario_hora")
     if hour is not None and NOW_MADRID.hour >= int(hour) and state.get("ultimo_resumen") != TODAY.isoformat():
         if cfg_a.get("resumen_por_ventana", True):
-            msgs = summary_messages(cfg, gf_rows, gf_index)
+            msgs = summary_messages(cfg, gf_rows, gf_index, cal_extra=cal_rows)
         else:
             msgs = [summary_text(cfg, gf_rows, gf_index)]
         total_g = stats["google_ok"] + stats["google_fail"]
@@ -1083,19 +1407,33 @@ def main():
             state["ultimo_resumen"] = TODAY.isoformat()
 
     state["ultima_ejecucion"] = {"fecha": NOW_ISO, "google_ok": stats["google_ok"],
-                                 "google_fallos": stats["google_fail"], "alertas": stats["alertas"]}
+                                 "google_fallos": stats["google_fail"], "alertas": stats["alertas"],
+                                 "calendario_consultas": stats.get("cal", 0),
+                                 "calendario_fallos": stats.get("cal_fallos", 0),
+                                 "calendario_rutas": len({k for k, _ in cal_done}),
+                                 "calendario_presupuesto": state.get("calendario_presupuesto")}
 
     # ---------- 7. Guardar ----------
     append_csv(TP_FILE, TP_FIELDS, tp_rows)
     append_csv(GF_FILE, GF_FIELDS, gf_rows)
+    append_csv(CAL_FILE, CAL_FIELDS, cal_rows)
     if run_n % 8 == 0:
         prune_csv(TP_FILE, TP_FIELDS, 150)
         prune_csv(GF_FILE, GF_FIELDS, 150)
+        prune_csv(CAL_FILE, CAL_FIELDS, 90)
     LATEST_FILE.write_text(json.dumps(latest, ensure_ascii=False, indent=1), encoding="utf-8")
     save_state(state)
+    log(f"Calendario: {stats.get('cal', 0)} consultas, {len({k for k, _ in cal_done})} rutas cubiertas")
     log(f"Listo. Google OK: {stats['google_ok']}, fallos: {stats['google_fail']}, "
         f"alertas: {stats['alertas']}, en cola de silencio: {stats['en_cola']}")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) >= 3 and sys.argv[1] == "--barrido":
+        # python radar.py --barrido N --partes M
+        n = int(sys.argv[2])
+        m = int(sys.argv[4]) if len(sys.argv) >= 5 and sys.argv[3] == "--partes" else 4
+        run_shard(n, m)
+    else:
+        main()

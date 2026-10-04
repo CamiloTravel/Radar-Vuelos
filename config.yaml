@@ -16,28 +16,31 @@ origen:
 #  fechas con una antelación parecida (± estos días)
 ventanas:
   ultimo_minuto: {nombre: "Último minuto", desde_dias: 1,   hasta_dias: 14,  cada_horas: 3,  tolerancia_dias: 3}
-  corto:         {nombre: "Corto plazo",   desde_dias: 15,  hasta_dias: 60,  cada_horas: 3,  tolerancia_dias: 10}
-  medio:         {nombre: "Medio plazo",   desde_dias: 61,  hasta_dias: 180, cada_horas: 6,  tolerancia_dias: 25}
-  largo:         {nombre: "Largo plazo",   desde_dias: 181, hasta_dias: 365, cada_horas: 12, tolerancia_dias: 45}
+  corto:         {nombre: "Corto plazo",   desde_dias: 15,  hasta_dias: 45,  cada_horas: 3,  tolerancia_dias: 7}
+  medio:         {nombre: "Medio plazo",   desde_dias: 46,  hasta_dias: 129, cada_horas: 6,  tolerancia_dias: 20}
+  largo:         {nombre: "Largo plazo",   desde_dias: 130, hasta_dias: 200, cada_horas: 12, tolerancia_dias: 20}
 
 # ------------------------------------------------------------
 # PERFILES DE VIAJE
 #  factor_duracion: máximo X veces la duración del vuelo directo
-#  fin_de_semana: prioriza salir viernes y volver lunes
+#  fin_de_semana: prioriza viajes que aprovechan un fin de semana (salir jue/vie/sáb
+#  y volver dom/lun/mar, hasta 5 días). Los demás necesitan más puntuación para avisar
 # ------------------------------------------------------------
 perfiles:
   europa:
-    estancia_dias: [3, 5]
+    estancia_dias: [3, 9]       # se barren todas: 3, 4, 5, 6, 7, 8 y 9 días
     equipaje_mano: 1          # maleta de cabina 10 kg
     equipaje_facturado: 0
     factor_duracion: 3
     fin_de_semana: true
   largo:
-    estancia_dias: [14, 21]
+    estancia_dias: [12, 25]
     equipaje_mano: 1
     equipaje_facturado: 1     # maleta de 23 kg
     factor_duracion: 2
     fin_de_semana: false
+    estancias_calendario: [12, 14, 16, 18, 20, 22, 24, 25]  # se barren en cada ejecución
+    estancias_rotativas: [13, 15, 17, 19, 21, 23]          # una distinta en cada ejecución
 
 # Evitar billetes separados / autotransbordo
 ocultar_autotransbordo: true
@@ -68,7 +71,21 @@ alertas:
   silencio: {desde: 1, hasta: 7}   # Horas de Madrid sin alertas (salvo error fares)
   resumen_diario_hora: 9
   margen_busqueda_objetivo: 0.15   # Verificar en Google fechas del radar hasta un 15% por encima del objetivo
+  min_barridos: 12                 # Barridos de calendario necesarios antes de juzgar chollos
+  min_dias_calendario: 4           # …repartidos en al menos 4 días distintos
+  dias_historial_calendario: 30
+  mejora_sobre_minimo_historico: 0.07  # Un chollo debe batir en un 7% lo más barato visto en 30 días
+  repetir_objetivo_cada_horas: 72      # Si un objetivo se sigue cumpliendo, recordártelo cada 3 días
   resumen_por_ventana: true        # true: 4 mensajes (uno por ventana) · false: un solo mensaje
+
+# Calendario de precios de Google: una consulta devuelve el precio (con tu
+# equipaje) de TODAS las fechas de salida de un tramo de 61 días
+calendario:
+  activado: true
+  presupuesto_inicial_por_parte: 150   # consultas por cada uno de los 4 trabajos en paralelo
+  presupuesto_minimo_por_parte: 60     # el escalado automático no baja de aquí…
+  presupuesto_maximo_por_parte: 350    # …ni sube de aquí
+  max_consultas_por_ejecucion: 200     # solo si se ejecuta sin trabajos en paralelo
 
 google:
   activado: true
@@ -77,34 +94,35 @@ google:
 # ------------------------------------------------------------
 # RUTAS (ida y vuelta desde Madrid)
 #  prioridad: alta (más búsquedas) o media
-#  duracion_directo_min: duración aproximada del vuelo directo
+#  duracion_directo_min: duración del vuelo directo (horario de las aerolíneas, en el
+#  sentido más largo del trayecto). Europa: máx. 3 veces · Latam/Norteamérica: máx. 2 veces
 #  precio_objetivo: avísame si baja de este precio (null = ninguno)
 # ------------------------------------------------------------
 rutas:
   # --- Prioritarias ---
-  - {id: BER, nombre: Berlín,           codigo_ciudad: BER, aeropuerto: BER, perfil: europa, prioridad: alta,  duracion_directo_min: 180, precio_objetivo: null}
-  - {id: MUC, nombre: Múnich,           codigo_ciudad: MUC, aeropuerto: MUC, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
-  - {id: BCN, nombre: Barcelona,        codigo_ciudad: BCN, aeropuerto: BCN, perfil: europa, prioridad: alta,  duracion_directo_min: 80,  precio_objetivo: null}
-  - {id: IBZ, nombre: Ibiza,            codigo_ciudad: IBZ, aeropuerto: IBZ, perfil: europa, prioridad: alta,  duracion_directo_min: 70,  precio_objetivo: null}
-  - {id: AMS, nombre: Ámsterdam,        codigo_ciudad: AMS, aeropuerto: AMS, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
-  - {id: LIS, nombre: Lisboa,           codigo_ciudad: LIS, aeropuerto: LIS, perfil: europa, prioridad: alta,  duracion_directo_min: 75,  precio_objetivo: null}
-  - {id: ROM, nombre: Roma,             codigo_ciudad: ROM, aeropuerto: FCO, perfil: europa, prioridad: alta,  duracion_directo_min: 150, precio_objetivo: null}
-  - {id: BOG, nombre: Bogotá,           codigo_ciudad: BOG, aeropuerto: BOG, perfil: largo,  prioridad: alta,  duracion_directo_min: 570, precio_objetivo: 670}
-  - {id: MIA, nombre: Miami,            codigo_ciudad: MIA, aeropuerto: MIA, perfil: largo,  prioridad: alta,  duracion_directo_min: 450, precio_objetivo: null}
+  - {id: BER, nombre: Berlín,           codigo_ciudad: BER, aeropuerto: BER, perfil: europa, prioridad: alta,  duracion_directo_min: 195, precio_objetivo: null}
+  - {id: MUC, nombre: Múnich,           codigo_ciudad: MUC, aeropuerto: MUC, perfil: europa, prioridad: alta,  duracion_directo_min: 160, precio_objetivo: null}
+  - {id: BCN, nombre: Barcelona,        codigo_ciudad: BCN, aeropuerto: BCN, perfil: europa, prioridad: alta,  duracion_directo_min: 85,  precio_objetivo: null}
+  - {id: IBZ, nombre: Ibiza,            codigo_ciudad: IBZ, aeropuerto: IBZ, perfil: europa, prioridad: alta,  duracion_directo_min: 75,  precio_objetivo: null}
+  - {id: AMS, nombre: Ámsterdam,        codigo_ciudad: AMS, aeropuerto: AMS, perfil: europa, prioridad: alta,  duracion_directo_min: 160, precio_objetivo: null}
+  - {id: LIS, nombre: Lisboa,           codigo_ciudad: LIS, aeropuerto: LIS, perfil: europa, prioridad: alta,  duracion_directo_min: 85,  precio_objetivo: null}
+  - {id: ROM, nombre: Roma,             codigo_ciudad: ROM, aeropuerto: FCO, perfil: europa, prioridad: alta,  duracion_directo_min: 155, precio_objetivo: null}
+  - {id: BOG, nombre: Bogotá,           codigo_ciudad: BOG, aeropuerto: BOG, perfil: largo,  prioridad: alta,  duracion_directo_min: 640, precio_objetivo: 670}
+  - {id: MIA, nombre: Miami,            codigo_ciudad: MIA, aeropuerto: MIA, perfil: largo,  prioridad: alta,  duracion_directo_min: 550, precio_objetivo: null}
   - {id: MEX, nombre: Ciudad de México, codigo_ciudad: MEX, aeropuerto: MEX, perfil: largo,  prioridad: alta,  duracion_directo_min: 720, precio_objetivo: null}
   # --- Secundarias ---
-  - {id: NYC, nombre: Nueva York,       codigo_ciudad: NYC, aeropuerto: JFK, perfil: largo,  prioridad: media, duracion_directo_min: 480, precio_objetivo: null}
-  - {id: DUB, nombre: Dublín,           codigo_ciudad: DUB, aeropuerto: DUB, perfil: europa, prioridad: media, duracion_directo_min: 150, precio_objetivo: null}
-  - {id: BUD, nombre: Budapest,         codigo_ciudad: BUD, aeropuerto: BUD, perfil: europa, prioridad: media, duracion_directo_min: 185, precio_objetivo: null}
-  - {id: KRK, nombre: Cracovia,         codigo_ciudad: KRK, aeropuerto: KRK, perfil: europa, prioridad: media, duracion_directo_min: 190, precio_objetivo: null}
-  - {id: SPU, nombre: Hvar (vía Split), codigo_ciudad: SPU, aeropuerto: SPU, perfil: europa, prioridad: media, duracion_directo_min: 165, precio_objetivo: null}
+  - {id: NYC, nombre: Nueva York,       codigo_ciudad: NYC, aeropuerto: JFK, perfil: largo,  prioridad: media, duracion_directo_min: 500, precio_objetivo: null}
+  - {id: DUB, nombre: Dublín,           codigo_ciudad: DUB, aeropuerto: DUB, perfil: europa, prioridad: media, duracion_directo_min: 160, precio_objetivo: null}
+  - {id: BUD, nombre: Budapest,         codigo_ciudad: BUD, aeropuerto: BUD, perfil: europa, prioridad: media, duracion_directo_min: 200, precio_objetivo: null}
+  - {id: KRK, nombre: Cracovia,         codigo_ciudad: KRK, aeropuerto: KRK, perfil: europa, prioridad: media, duracion_directo_min: 215, precio_objetivo: null}
+  - {id: SPU, nombre: Hvar (vía Split), codigo_ciudad: SPU, aeropuerto: SPU, perfil: europa, prioridad: media, duracion_directo_min: 175, precio_objetivo: null}
   - {id: JMK, nombre: Mykonos,          codigo_ciudad: JMK, aeropuerto: JMK, perfil: europa, prioridad: media, duracion_directo_min: 240, precio_objetivo: null}
-  - {id: BUH, nombre: Bucarest,         codigo_ciudad: BUH, aeropuerto: OTP, perfil: europa, prioridad: media, duracion_directo_min: 225, precio_objetivo: null}
+  - {id: BUH, nombre: Bucarest,         codigo_ciudad: BUH, aeropuerto: OTP, perfil: europa, prioridad: media, duracion_directo_min: 250, precio_objetivo: null}
 
   # --- Ida y vuelta desde otras ciudades (van a Madrid y vuelven) ---
   #  origen_*: ciudad de salida · nombre/codigo_ciudad/aeropuerto: destino (Madrid)
-  - {id: BER-MAD, origen_nombre: Berlín, origen_ciudad: BER, origen_aeropuerto: BER, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: europa, prioridad: media, duracion_directo_min: 180, precio_objetivo: 160}
-  - {id: BOG-MAD, origen_nombre: Bogotá, origen_ciudad: BOG, origen_aeropuerto: BOG, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: largo,  prioridad: media, duracion_directo_min: 570, precio_objetivo: 750}
+  - {id: BER-MAD, origen_nombre: Berlín, origen_ciudad: BER, origen_aeropuerto: BER, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: europa, prioridad: media, duracion_directo_min: 195, precio_objetivo: 160}
+  - {id: BOG-MAD, origen_nombre: Bogotá, origen_ciudad: BOG, origen_aeropuerto: BOG, nombre: Madrid, codigo_ciudad: MAD, aeropuerto: MAD, perfil: largo,  prioridad: media, duracion_directo_min: 640, precio_objetivo: 750}
 
 # ------------------------------------------------------------
 # EXPLORACIÓN: Madrid a cualquier otro destino de estas regiones
