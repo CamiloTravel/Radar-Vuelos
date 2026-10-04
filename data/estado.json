@@ -1,5 +1,5 @@
 {
- "ejecuciones": 69,
+ "ejecuciones": 70,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -97,11 +97,11 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-10-04T20:48:44+00:00",
-  "google_ok": 113,
-  "google_fallos": 21,
+  "fecha": "2026-10-04T21:45:46+00:00",
+  "google_ok": 87,
+  "google_fallos": 12,
   "alertas": 0,
-  "calendario_consultas": 461,
+  "calendario_consultas": 239,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
@@ -199,7 +199,8 @@
   "BER-MAD|2027-04-03|2027-04-07": "2026-10-05T06:47:08.860592+00:00",
   "BOG|2026-11-12|2026-11-24": "2026-10-05T08:48:44.794382+00:00",
   "BER-MAD|2026-12-03|2026-12-10": "2026-10-05T08:48:44.794382+00:00",
-  "BER-MAD|2027-02-25|2027-03-02": "2026-10-05T08:48:44.794382+00:00"
+  "BER-MAD|2027-02-25|2027-03-02": "2026-10-05T08:48:44.794382+00:00",
+  "BER-MAD|2026-11-04|2026-11-12": "2026-10-05T09:45:46.916651+00:00"
  },
  "calendario_presupuesto": 150,
  "ultimo_aviso_objetivo": {
