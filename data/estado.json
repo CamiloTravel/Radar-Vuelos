@@ -1,5 +1,5 @@
 {
- "ejecuciones": 75,
+ "ejecuciones": 76,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -96,10 +96,14 @@
   "BOG-MAD|2027-02-28|2027-03-14": {
    "precio": 725.0,
    "fecha": "2026-10-05T06:51:33+00:00"
+  },
+  "BOG-MAD|2027-02-11|2027-03-01": {
+   "precio": 672.0,
+   "fecha": "2026-10-05T07:05:43+00:00"
   }
  },
  "inicializado": true,
- "ultimo_resumen": "2026-10-04",
+ "ultimo_resumen": "2026-10-05",
  "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
@@ -125,8 +129,8 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-10-05T06:51:33+00:00",
-  "google_ok": 114,
+  "fecha": "2026-10-05T07:05:43+00:00",
+  "google_ok": 112,
   "google_fallos": 18,
   "alertas": 0,
   "calendario_consultas": 461,

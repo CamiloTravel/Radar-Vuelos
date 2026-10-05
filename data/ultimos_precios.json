@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-05T06:51:33+00:00",
+ "actualizado": "2026-10-05T07:05:43+00:00",
  "rutas": {
   "BER": {
    "nombre": "Berlín",
@@ -554,7 +554,7 @@
   },
   "PDL": {
    "nombre": "Ponta Delgada",
-   "precio": 218.0,
+   "precio": 217.0,
    "salida": "2026-12-21",
    "regreso": "2026-12-28"
   },
@@ -680,7 +680,7 @@
   },
   "CPH": {
    "nombre": "Copenhagen",
-   "precio": 193.0,
+   "precio": 192.0,
    "salida": "2026-12-27",
    "regreso": "2027-01-02"
   },
@@ -692,7 +692,7 @@
   },
   "SAL": {
    "nombre": "San Salvador",
-   "precio": 873.0,
+   "precio": 872.0,
    "salida": "2026-12-02",
    "regreso": "2026-12-27"
   },
@@ -790,7 +790,7 @@
  "calendario": {
   "BER": {
    "ultimo_minuto": {
-    "precio": 160.0,
+    "precio": 161.0,
     "salida": "2026-10-18",
     "regreso": "2026-10-27"
    },
@@ -919,9 +919,9 @@
     "regreso": "2026-10-27"
    },
    "corto": {
-    "precio": 807.0,
-    "salida": "2026-11-12",
-    "regreso": "2026-11-24"
+    "precio": 800.0,
+    "salida": "2026-11-19",
+    "regreso": "2026-12-08"
    },
    "medio": {
     "precio": 800.0,
@@ -971,8 +971,8 @@
   "NYC": {
    "ultimo_minuto": {
     "precio": 375.0,
-    "salida": "2026-10-12",
-    "regreso": "2026-10-28"
+    "salida": "2026-10-14",
+    "regreso": "2026-11-02"
    },
    "corto": {
     "precio": 360.0,
@@ -1055,8 +1055,8 @@
   },
   "JMK": {
    "ultimo_minuto": {
-    "precio": 257.0,
-    "salida": "2026-10-18",
+    "precio": 249.0,
+    "salida": "2026-10-16",
     "regreso": "2026-10-24"
    },
    "corto": {
