@@ -1,5 +1,5 @@
 {
- "ejecuciones": 79,
+ "ejecuciones": 80,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -110,26 +110,10 @@
  "ultimo_resumen": "2026-10-05",
  "cola_silencio": [],
  "v2_avisado": true,
- "ultimo_aviso_ruta": {
-  "X-TRN": {
-   "precio": 45.0,
-   "fecha": "2026-10-04T18:47:08+00:00",
-   "tipo": "error_fare"
-  },
-  "BER-MAD": {
-   "precio": 140.0,
-   "fecha": "2026-10-04T18:47:08+00:00",
-   "tipo": "objetivo"
-  },
-  "BOG-MAD": {
-   "precio": 672.0,
-   "fecha": "2026-10-04T18:47:08+00:00",
-   "tipo": "objetivo"
-  }
- },
+ "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-10-05T16:03:05+00:00",
-  "google_ok": 87,
+  "fecha": "2026-10-05T22:03:08+00:00",
+  "google_ok": 86,
   "google_fallos": 12,
   "alertas": 0,
   "calendario_consultas": 239,
