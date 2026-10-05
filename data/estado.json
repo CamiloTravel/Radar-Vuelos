@@ -1,5 +1,5 @@
 {
- "ejecuciones": 74,
+ "ejecuciones": 75,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -76,76 +76,31 @@
   "BOG-MAD|2027-02-28|2027-03-12": {
    "precio": 725.0,
    "fecha": "2026-10-04T22:03:00+00:00"
+  },
+  "BOG-MAD|2027-02-11|2027-02-24": {
+   "precio": 672.0,
+   "fecha": "2026-10-05T06:51:33+00:00"
+  },
+  "BOG-MAD|2027-02-11|2027-02-27": {
+   "precio": 682.0,
+   "fecha": "2026-10-05T06:51:33+00:00"
+  },
+  "BOG-MAD|2027-02-11|2027-02-28": {
+   "precio": 672.0,
+   "fecha": "2026-10-05T06:51:33+00:00"
+  },
+  "BOG-MAD|2027-02-12|2027-02-28": {
+   "precio": 672.0,
+   "fecha": "2026-10-05T06:51:33+00:00"
+  },
+  "BOG-MAD|2027-02-28|2027-03-14": {
+   "precio": 725.0,
+   "fecha": "2026-10-05T06:51:33+00:00"
   }
  },
  "inicializado": true,
  "ultimo_resumen": "2026-10-04",
- "cola_silencio": [
-  {
-   "tipo": "objetivo",
-   "clave": "BOG-MAD",
-   "nombre": "Madrid",
-   "perfil": "largo",
-   "ventana": "medio",
-   "ventana_nombre": "Medio plazo",
-   "salida": "2027-02-11",
-   "regreso": "2027-02-24",
-   "precio": 672.0,
-   "normal": null,
-   "caida": null,
-   "puntuacion": null,
-   "aerolineas": [
-    "Air France"
-   ],
-   "preferida": true,
-   "escalas": 1,
-   "vuelo": {
-    "sale": "21:35 BOG",
-    "llega": "17:45 MAD (+1)",
-    "via": [
-     "CDG"
-    ]
-   },
-   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMTFggApqBRIDQk9HcgUSA01BRBodEgoyMDI3LTAyLTI0YIAKagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR",
-   "nota": "Tu objetivo era 750 €",
-   "aeropuerto": "MAD",
-   "origen_aeropuerto": "BOG",
-   "ruta_txt": "Bogotá → Madrid",
-   "objetivo": 750.0,
-   "en_cola_desde": "2026-10-05T03:38:54+00:00"
-  },
-  {
-   "tipo": "objetivo",
-   "clave": "BOG-MAD",
-   "nombre": "Madrid",
-   "perfil": "largo",
-   "ventana": "medio",
-   "ventana_nombre": "Medio plazo",
-   "salida": "2027-02-11",
-   "regreso": "2027-02-27",
-   "precio": 682.0,
-   "normal": null,
-   "caida": null,
-   "puntuacion": null,
-   "aerolineas": [
-    "Avianca"
-   ],
-   "preferida": false,
-   "escalas": 0,
-   "vuelo": {
-    "sale": "07:50 BOG",
-    "llega": "23:25 MAD",
-    "via": []
-   },
-   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMTFggApqBRIDQk9HcgUSA01BRBodEgoyMDI3LTAyLTI3YIAKagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR",
-   "nota": "Tu objetivo era 750 €",
-   "aeropuerto": "MAD",
-   "origen_aeropuerto": "BOG",
-   "ruta_txt": "Bogotá → Madrid",
-   "objetivo": 750.0,
-   "en_cola_desde": "2026-10-05T04:03:02+00:00"
-  }
- ],
+ "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
   "LIS": {
@@ -170,11 +125,11 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-10-05T04:03:02+00:00",
-  "google_ok": 96,
-  "google_fallos": 12,
+  "fecha": "2026-10-05T06:51:33+00:00",
+  "google_ok": 114,
+  "google_fallos": 18,
   "alertas": 0,
-  "calendario_consultas": 239,
+  "calendario_consultas": 461,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
@@ -226,7 +181,6 @@
   "AMS|2026-11-06|2026-11-10": "2026-10-05T15:05:33.028974+00:00",
   "BUH|2027-01-17|2027-01-20": "2026-10-05T15:05:33.028974+00:00",
   "IBZ|2026-10-16|2026-10-19": "2026-10-05T15:05:33.028974+00:00",
-  "BER-MAD|2027-04-03|2027-04-07": "2026-10-05T06:47:08.860592+00:00",
   "BOG|2026-11-12|2026-11-24": "2026-10-05T08:48:44.794382+00:00",
   "BER-MAD|2026-12-03|2026-12-10": "2026-10-05T08:48:44.794382+00:00",
   "BER-MAD|2027-02-25|2027-03-02": "2026-10-05T08:48:44.794382+00:00",
