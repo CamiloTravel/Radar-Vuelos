@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-05T03:38:54+00:00",
+ "actualizado": "2026-10-05T04:03:02+00:00",
  "rutas": {
   "BER": {
    "nombre": "Berlín",
@@ -603,7 +603,7 @@
    "ultimo_minuto": {
     "precio": 193.0,
     "salida": "2026-10-18",
-    "regreso": "2026-10-26"
+    "regreso": "2026-10-27"
    },
    "corto": {
     "precio": 151.0,
@@ -680,7 +680,7 @@
    "corto": {
     "precio": 800.0,
     "salida": "2026-11-12",
-    "regreso": "2026-11-25"
+    "regreso": "2026-11-27"
    },
    "medio": {
     "precio": 800.0,
@@ -697,12 +697,12 @@
    "ultimo_minuto": {
     "precio": 524.0,
     "salida": "2026-10-07",
-    "regreso": "2026-10-21"
+    "regreso": "2026-10-22"
    },
    "corto": {
     "precio": 380.0,
-    "salida": "2026-11-03",
-    "regreso": "2026-11-17"
+    "salida": "2026-11-08",
+    "regreso": "2026-11-23"
    }
   },
   "MEX": {
@@ -714,7 +714,7 @@
    "corto": {
     "precio": 829.0,
     "salida": "2026-11-05",
-    "regreso": "2026-11-18"
+    "regreso": "2026-11-19"
    }
   },
   "NYC": {
@@ -772,7 +772,7 @@
     "regreso": "2026-10-23"
    },
    "corto": {
-    "precio": 167.0,
+    "precio": 147.0,
     "salida": "2026-11-19",
     "regreso": "2026-11-22"
    }
@@ -832,7 +832,7 @@
    "corto": {
     "precio": 731.0,
     "salida": "2026-10-28",
-    "regreso": "2026-11-17"
+    "regreso": "2026-11-12"
    },
    "medio": {
     "precio": 672.0,
