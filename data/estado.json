@@ -1,5 +1,5 @@
 {
- "ejecuciones": 85,
+ "ejecuciones": 86,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -112,6 +112,10 @@
   "BOG-MAD|2027-02-28|2027-03-13": {
    "precio": 729.0,
    "fecha": "2026-10-06T13:07:20+00:00"
+  },
+  "BOG-MAD|2027-02-28|2027-03-15": {
+   "precio": 729.0,
+   "fecha": "2026-10-06T16:03:13+00:00"
   }
  },
  "inicializado": true,
@@ -120,11 +124,11 @@
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-10-06T13:07:20+00:00",
-  "google_ok": 126,
-  "google_fallos": 24,
+  "fecha": "2026-10-06T16:03:13+00:00",
+  "google_ok": 87,
+  "google_fallos": 12,
   "alertas": 0,
-  "calendario_consultas": 572,
+  "calendario_consultas": 239,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
@@ -182,7 +186,8 @@
   "SPU|2026-10-17|2026-10-22": "2026-10-07T01:07:20.490088+00:00",
   "JMK|2026-10-20|2026-10-24": "2026-10-07T01:07:20.490088+00:00",
   "BUH|2026-10-20|2026-10-28": "2026-10-07T01:07:20.490088+00:00",
-  "NYC|2026-11-04|2026-11-16": "2026-10-07T01:07:20.490088+00:00"
+  "NYC|2026-11-04|2026-11-16": "2026-10-07T01:07:20.490088+00:00",
+  "KRK|2026-10-20|2026-10-29": "2026-10-07T04:03:13.292283+00:00"
  },
  "calendario_presupuesto": 150,
  "ultimo_aviso_objetivo": {
