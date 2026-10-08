@@ -1,5 +1,5 @@
 {
- "ejecuciones": 98,
+ "ejecuciones": 99,
  "alertas_enviadas": {
   "DUB|2026-10-08|2026-10-11": {
    "precio": 315.0,
@@ -94,8 +94,8 @@
    "fecha": "2026-10-05T06:51:33+00:00"
   },
   "BOG-MAD|2027-02-28|2027-03-14": {
-   "precio": 725.0,
-   "fecha": "2026-10-05T06:51:33+00:00"
+   "precio": 672.0,
+   "fecha": "2026-10-08T07:06:17+00:00"
   },
   "BOG-MAD|2027-02-11|2027-03-01": {
    "precio": 672.0,
@@ -116,45 +116,15 @@
   "BOG-MAD|2027-02-28|2027-03-15": {
    "precio": 729.0,
    "fecha": "2026-10-06T16:03:13+00:00"
+  },
+  "BOG-MAD|2027-02-11|2027-02-26": {
+   "precio": 672.0,
+   "fecha": "2026-10-08T07:06:17+00:00"
   }
  },
  "inicializado": true,
- "ultimo_resumen": "2026-10-07",
- "cola_silencio": [
-  {
-   "tipo": "objetivo",
-   "clave": "BOG-MAD",
-   "nombre": "Madrid",
-   "perfil": "largo",
-   "ventana": "medio",
-   "ventana_nombre": "Medio plazo",
-   "salida": "2027-02-11",
-   "regreso": "2027-02-26",
-   "precio": 672.0,
-   "normal": null,
-   "caida": null,
-   "puntuacion": null,
-   "aerolineas": [
-    "Air France"
-   ],
-   "preferida": true,
-   "escalas": 1,
-   "vuelo": {
-    "sale": "21:35 BOG",
-    "llega": "17:45 MAD (+1)",
-    "via": [
-     "CDG"
-    ]
-   },
-   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDItMTFggApqBRIDQk9HcgUSA01BRBodEgoyMDI3LTAyLTI2YIAKagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR",
-   "nota": "Tu objetivo era 750 €",
-   "aeropuerto": "MAD",
-   "origen_aeropuerto": "BOG",
-   "ruta_txt": "Bogotá → Madrid",
-   "objetivo": 750.0,
-   "en_cola_desde": "2026-10-08T04:03:06+00:00"
-  }
- ],
+ "ultimo_resumen": "2026-10-08",
+ "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
   "BOG-MAD": {
@@ -164,27 +134,16 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-10-08T04:03:06+00:00",
-  "google_ok": 92,
-  "google_fallos": 12,
+  "fecha": "2026-10-08T07:06:17+00:00",
+  "google_ok": 112,
+  "google_fallos": 20,
   "alertas": 0,
-  "calendario_consultas": 239,
+  "calendario_consultas": 461,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
  },
  "radar_obsoletos": {
-  "BER|2026-10-21|2026-10-28": "2026-10-08T04:03:36.915804+00:00",
-  "BER|2026-10-20|2026-10-27": "2026-10-08T04:03:36.915804+00:00",
-  "BER|2026-11-12|2026-11-19": "2026-10-08T04:03:36.915804+00:00",
-  "BER|2027-01-23|2027-01-26": "2026-10-08T04:03:36.915804+00:00",
-  "BER-MAD|2026-11-04|2026-11-12": "2026-10-08T04:03:36.915804+00:00",
-  "IBZ|2026-10-14|2026-10-19": "2026-10-08T04:03:36.915804+00:00",
-  "IBZ|2026-10-17|2026-10-22": "2026-10-08T04:03:36.915804+00:00",
-  "AMS|2026-10-16|2026-10-23": "2026-10-08T04:03:36.915804+00:00",
-  "IBZ|2026-10-15|2026-10-20": "2026-10-08T07:05:56.038810+00:00",
-  "IBZ|2026-10-18|2026-10-23": "2026-10-08T07:05:56.038810+00:00",
-  "MUC|2026-12-12|2026-12-16": "2026-10-08T07:05:56.038810+00:00",
   "BOG-MAD|2027-02-11|2027-02-25": "2026-10-08T10:03:05.559040+00:00",
   "ROM|2026-10-22|2026-10-27": "2026-10-08T13:06:52.049909+00:00",
   "MUC|2026-12-09|2026-12-12": "2026-10-08T13:06:52.049909+00:00",
