@@ -1,12 +1,14 @@
 {
- "actualizado": "2026-10-10T10:03:17+00:00",
+ "actualizado": "2026-10-10T13:07:07+00:00",
  "rutas": {
   "BER": {
    "nombre": "Berlín",
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "MUC": {
@@ -14,7 +16,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BCN": {
@@ -22,7 +26,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "IBZ": {
@@ -30,7 +36,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "AMS": {
@@ -38,7 +46,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "LIS": {
@@ -46,7 +56,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "ROM": {
@@ -54,7 +66,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BOG": {
@@ -62,7 +76,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "MIA": {
@@ -70,7 +86,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "MEX": {
@@ -78,7 +96,9 @@
    "prioridad": "alta",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "NYC": {
@@ -86,7 +106,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "DUB": {
@@ -94,7 +116,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BUD": {
@@ -102,7 +126,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "KRK": {
@@ -110,7 +136,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "SPU": {
@@ -118,7 +146,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "JMK": {
@@ -126,7 +156,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BUH": {
@@ -134,7 +166,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BER-MAD": {
@@ -142,7 +176,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   },
   "BOG-MAD": {
@@ -150,7 +186,9 @@
    "prioridad": "media",
    "ventanas": {
     "ultimo_minuto": null,
-    "corto": null
+    "corto": null,
+    "medio": null,
+    "largo": null
    }
   }
  },
@@ -175,9 +213,9 @@
   },
   "LPA": {
    "nombre": "Las Palmas",
-   "precio": 53.0,
-   "salida": "2026-10-22",
-   "regreso": "2026-10-27"
+   "precio": 50.0,
+   "salida": "2027-01-12",
+   "regreso": "2027-01-16"
   },
   "MAN": {
    "nombre": "Manchester",
@@ -193,9 +231,9 @@
   },
   "TCI": {
    "nombre": "Tenerife",
-   "precio": 56.0,
-   "salida": "2026-10-28",
-   "regreso": "2026-11-06"
+   "precio": 46.0,
+   "salida": "2027-01-10",
+   "regreso": "2027-01-17"
   },
   "PMO": {
    "nombre": "Palermo",
@@ -211,9 +249,9 @@
   },
   "LON": {
    "nombre": "London",
-   "precio": 48.0,
-   "salida": "2026-11-14",
-   "regreso": "2026-11-23"
+   "precio": 45.0,
+   "salida": "2026-12-12",
+   "regreso": "2026-12-16"
   },
   "OPO": {
    "nombre": "Porto",
@@ -223,21 +261,27 @@
   },
   "BRU": {
    "nombre": "Brussels",
-   "precio": 84.0,
-   "salida": "2026-10-20",
-   "regreso": "2026-10-27"
+   "precio": 67.0,
+   "salida": "2026-11-28",
+   "regreso": "2026-12-03"
   },
   "WAW": {
    "nombre": "Warsaw",
-   "precio": 92.0,
-   "salida": "2026-10-26",
-   "regreso": "2026-10-29"
+   "precio": 81.0,
+   "salida": "2026-12-17",
+   "regreso": "2026-12-20"
   },
   "GVA": {
    "nombre": "Geneva",
    "precio": 101.0,
    "salida": "2026-10-17",
    "regreso": "2026-10-25"
+  },
+  "NCE": {
+   "nombre": "Nice",
+   "precio": 83.0,
+   "salida": "2026-12-28",
+   "regreso": "2027-01-01"
   },
   "VDE": {
    "nombre": "Valverde",
@@ -259,15 +303,15 @@
   },
   "PAR": {
    "nombre": "Paris",
-   "precio": 91.0,
-   "salida": "2026-11-24",
-   "regreso": "2026-11-29"
+   "precio": 81.0,
+   "salida": "2026-11-30",
+   "regreso": "2026-12-06"
   },
   "FRA": {
    "nombre": "Frankfurt",
-   "precio": 157.0,
-   "salida": "2026-10-31",
-   "regreso": "2026-11-05"
+   "precio": 123.0,
+   "salida": "2027-01-16",
+   "regreso": "2027-01-22"
   },
   "PRG": {
    "nombre": "Prague",
@@ -277,27 +321,15 @@
   },
   "FNC": {
    "nombre": "Funchal",
-   "precio": 169.0,
-   "salida": "2026-10-31",
-   "regreso": "2026-11-07"
-  },
-  "ATH": {
-   "nombre": "Athens",
-   "precio": 148.0,
-   "salida": "2026-11-16",
-   "regreso": "2026-11-22"
+   "precio": 137.0,
+   "salida": "2026-12-02",
+   "regreso": "2026-12-11"
   },
   "TLS": {
    "nombre": "Toulouse",
-   "precio": 174.0,
-   "salida": "2026-10-29",
-   "regreso": "2026-11-01"
-  },
-  "BEG": {
-   "nombre": "Belgrade",
-   "precio": 90.0,
-   "salida": "2026-11-18",
-   "regreso": "2026-11-22"
+   "precio": 105.0,
+   "salida": "2027-02-05",
+   "regreso": "2027-02-14"
   },
   "BHX": {
    "nombre": "Birmingham",
@@ -317,23 +349,29 @@
    "salida": "2026-10-31",
    "regreso": "2026-11-06"
   },
+  "ATH": {
+   "nombre": "Athens",
+   "precio": 148.0,
+   "salida": "2026-11-16",
+   "regreso": "2026-11-22"
+  },
   "LCA": {
    "nombre": "Larnaca",
-   "precio": 176.0,
-   "salida": "2026-11-16",
-   "regreso": "2026-11-23"
+   "precio": 148.0,
+   "salida": "2027-01-15",
+   "regreso": "2027-01-22"
   },
   "IST": {
    "nombre": "Istanbul",
-   "precio": 185.0,
-   "salida": "2026-11-11",
-   "regreso": "2026-11-19"
+   "precio": 179.0,
+   "salida": "2026-12-12",
+   "regreso": "2026-12-20"
   },
   "AYT": {
    "nombre": "Antalya",
-   "precio": 252.0,
-   "salida": "2026-10-16",
-   "regreso": "2026-10-25"
+   "precio": 239.0,
+   "salida": "2027-03-01",
+   "regreso": "2027-03-07"
   },
   "TIV": {
    "nombre": "Tivat",
@@ -361,33 +399,33 @@
   },
   "SAO": {
    "nombre": "Sao Paulo",
-   "precio": 577.0,
-   "salida": "2026-10-31",
-   "regreso": "2026-11-14"
+   "precio": 556.0,
+   "salida": "2027-03-04",
+   "regreso": "2027-03-25"
   },
   "GYE": {
    "nombre": "Guayaquil",
-   "precio": 871.0,
-   "salida": "2026-11-09",
-   "regreso": "2026-11-30"
+   "precio": 680.0,
+   "salida": "2027-01-28",
+   "regreso": "2027-02-13"
   },
   "CUN": {
    "nombre": "Cancun",
-   "precio": 787.0,
-   "salida": "2026-11-24",
-   "regreso": "2026-12-08"
-  },
-  "UIO": {
-   "nombre": "Quito",
-   "precio": 933.0,
-   "salida": "2026-10-21",
-   "regreso": "2026-11-05"
+   "precio": 708.0,
+   "salida": "2027-02-01",
+   "regreso": "2027-02-14"
   },
   "BUE": {
    "nombre": "Buenos Aires",
-   "precio": 892.0,
-   "salida": "2026-11-12",
-   "regreso": "2026-12-03"
+   "precio": 636.0,
+   "salida": "2027-01-12",
+   "regreso": "2027-01-27"
+  },
+  "UIO": {
+   "nombre": "Quito",
+   "precio": 678.0,
+   "salida": "2027-01-27",
+   "regreso": "2027-02-10"
   },
   "MSQ": {
    "nombre": "Minsk",
@@ -397,9 +435,9 @@
   },
   "HAV": {
    "nombre": "Havana",
-   "precio": 1041.0,
-   "salida": "2026-11-19",
-   "regreso": "2026-12-06"
+   "precio": 840.0,
+   "salida": "2027-01-06",
+   "regreso": "2027-01-24"
   },
   "BLQ": {
    "nombre": "Bologna",
@@ -427,9 +465,21 @@
   },
   "AGP": {
    "nombre": "Malaga",
-   "precio": 74.0,
-   "salida": "2026-11-24",
-   "regreso": "2026-12-01"
+   "precio": 73.0,
+   "salida": "2027-01-14",
+   "regreso": "2027-01-21"
+  },
+  "WRO": {
+   "nombre": "Wroclaw",
+   "precio": 81.0,
+   "salida": "2026-11-28",
+   "regreso": "2026-12-02"
+  },
+  "TIA": {
+   "nombre": "Tirana",
+   "precio": 83.0,
+   "salida": "2026-11-29",
+   "regreso": "2026-12-05"
   },
   "BIO": {
    "nombre": "Bilbao",
@@ -437,11 +487,17 @@
    "salida": "2026-11-17",
    "regreso": "2026-11-21"
   },
-  "WRO": {
-   "nombre": "Wroclaw",
-   "precio": 98.0,
-   "salida": "2026-11-22",
-   "regreso": "2026-11-27"
+  "CPH": {
+   "nombre": "Copenhagen",
+   "precio": 88.0,
+   "salida": "2026-11-30",
+   "regreso": "2026-12-04"
+  },
+  "BEG": {
+   "nombre": "Belgrade",
+   "precio": 81.0,
+   "salida": "2026-12-14",
+   "regreso": "2026-12-21"
   },
   "BRI": {
    "nombre": "Bari",
@@ -451,9 +507,9 @@
   },
   "VCE": {
    "nombre": "Venice",
-   "precio": 105.0,
-   "salida": "2026-11-08",
-   "regreso": "2026-11-11"
+   "precio": 36.0,
+   "salida": "2026-12-30",
+   "regreso": "2027-01-06"
   },
   "VIE": {
    "nombre": "Vienna",
@@ -461,11 +517,11 @@
    "salida": "2026-11-10",
    "regreso": "2026-11-15"
   },
-  "NCE": {
-   "nombre": "Nice",
+  "ZRH": {
+   "nombre": "Zurich",
    "precio": 125.0,
-   "salida": "2026-11-11",
-   "regreso": "2026-11-14"
+   "salida": "2026-11-30",
+   "regreso": "2026-12-03"
   },
   "FUE": {
    "nombre": "Puerto del Rosario",
@@ -487,9 +543,9 @@
   },
   "HEL": {
    "nombre": "Helsinki",
-   "precio": 301.0,
-   "salida": "2026-11-17",
-   "regreso": "2026-11-20"
+   "precio": 194.0,
+   "salida": "2027-03-07",
+   "regreso": "2027-03-13"
   },
   "REC": {
    "nombre": "Recife",
@@ -505,9 +561,9 @@
   },
   "LIM": {
    "nombre": "Lima",
-   "precio": 664.0,
-   "salida": "2026-11-16",
-   "regreso": "2026-12-08"
+   "precio": 632.0,
+   "salida": "2027-03-15",
+   "regreso": "2027-03-31"
   },
   "VLN": {
    "nombre": "Valencia",
@@ -517,9 +573,9 @@
   },
   "SJO": {
    "nombre": "San Jose",
-   "precio": 785.0,
-   "salida": "2026-11-16",
-   "regreso": "2026-11-28"
+   "precio": 600.0,
+   "salida": "2027-02-18",
+   "regreso": "2027-03-05"
   },
   "CCS": {
    "nombre": "Caracas",
@@ -545,19 +601,175 @@
    "salida": "2026-11-15",
    "regreso": "2026-12-08"
   },
-  "MTY": {
-   "nombre": "Monterrey",
-   "precio": 837.0,
-   "salida": "2026-11-24",
-   "regreso": "2026-12-11"
+  "BRS": {
+   "nombre": "Bristol",
+   "precio": 51.0,
+   "salida": "2026-12-11",
+   "regreso": "2026-12-14"
+  },
+  "LYS": {
+   "nombre": "Lyon",
+   "precio": 136.0,
+   "salida": "2026-12-12",
+   "regreso": "2026-12-19"
+  },
+  "EAP": {
+   "nombre": "Basel",
+   "precio": 139.0,
+   "salida": "2026-12-20",
+   "regreso": "2026-12-27"
+  },
+  "STO": {
+   "nombre": "Stockholm",
+   "precio": 156.0,
+   "salida": "2026-12-26",
+   "regreso": "2027-01-04"
+  },
+  "TOS": {
+   "nombre": "Tromso",
+   "precio": 176.0,
+   "salida": "2026-12-02",
+   "regreso": "2026-12-09"
+  },
+  "OSL": {
+   "nombre": "Oslo",
+   "precio": 182.0,
+   "salida": "2026-12-02",
+   "regreso": "2026-12-07"
+  },
+  "CGN": {
+   "nombre": "Cologne",
+   "precio": 193.0,
+   "salida": "2026-12-21",
+   "regreso": "2026-12-27"
+  },
+  "TLL": {
+   "nombre": "Tallinn",
+   "precio": 129.0,
+   "salida": "2027-02-23",
+   "regreso": "2027-03-01"
+  },
+  "PEI": {
+   "nombre": "Pereira",
+   "precio": 1304.0,
+   "salida": "2026-12-10",
+   "regreso": "2026-12-25"
+  },
+  "CLO": {
+   "nombre": "Cali",
+   "precio": 1483.0,
+   "salida": "2026-12-22",
+   "regreso": "2027-01-11"
+  },
+  "ACE": {
+   "nombre": "Arrecife",
+   "precio": 62.0,
+   "salida": "2027-01-20",
+   "regreso": "2027-01-25"
+  },
+  "NAP": {
+   "nombre": "Naples",
+   "precio": 82.0,
+   "salida": "2027-01-19",
+   "regreso": "2027-01-24"
+  },
+  "GDN": {
+   "nombre": "Gdansk",
+   "precio": 88.0,
+   "salida": "2027-01-21",
+   "regreso": "2027-01-25"
+  },
+  "SCQ": {
+   "nombre": "Santiago De Compostela",
+   "precio": 88.0,
+   "salida": "2027-01-01",
+   "regreso": "2027-01-04"
+  },
+  "RMO": {
+   "nombre": "Chisinau",
+   "precio": 102.0,
+   "salida": "2027-01-17",
+   "regreso": "2027-01-24"
+  },
+  "INN": {
+   "nombre": "Innsbruck",
+   "precio": 181.0,
+   "salida": "2027-01-18",
+   "regreso": "2027-01-22"
+  },
+  "RVN": {
+   "nombre": "Rovaniemi",
+   "precio": 209.0,
+   "salida": "2027-01-01",
+   "regreso": "2027-01-09"
+  },
+  "GUA": {
+   "nombre": "Guatemala City",
+   "precio": 649.0,
+   "salida": "2027-03-19",
+   "regreso": "2027-04-01"
+  },
+  "SBH": {
+   "nombre": "Saint Barthelemy",
+   "precio": 1106.0,
+   "salida": "2027-01-13",
+   "regreso": "2027-01-25"
+  },
+  "TRN": {
+   "nombre": "Turin",
+   "precio": 44.0,
+   "salida": "2027-02-03",
+   "regreso": "2027-02-10"
+  },
+  "EDI": {
+   "nombre": "Edinburgh",
+   "precio": 113.0,
+   "salida": "2027-02-04",
+   "regreso": "2027-02-07"
+  },
+  "FLR": {
+   "nombre": "Florence",
+   "precio": 150.0,
+   "salida": "2027-02-19",
+   "regreso": "2027-02-22"
+  },
+  "FOR": {
+   "nombre": "Fortaleza",
+   "precio": 619.0,
+   "salida": "2027-02-23",
+   "regreso": "2027-03-08"
+  },
+  "CTG": {
+   "nombre": "Cartagena",
+   "precio": 919.0,
+   "salida": "2027-03-10",
+   "regreso": "2027-03-30"
+  },
+  "VLC": {
+   "nombre": "Valencia",
+   "precio": 83.0,
+   "salida": "2027-04-01",
+   "regreso": "2027-04-04"
+  },
+  "IZM": {
+   "nombre": "Izmir",
+   "precio": 202.0,
+   "salida": "2027-04-09",
+   "regreso": "2027-04-16"
+  },
+  "MGF": {
+   "nombre": "Maringa",
+   "precio": 1000.0,
+   "salida": "2027-04-15",
+   "regreso": "2027-05-04"
   }
  },
  "calendario": {
   "BER": {
    "ultimo_minuto": {
-    "precio": 142.0,
-    "salida": "2026-10-21",
-    "regreso": "2026-10-28"
+    "precio": 162.0,
+    "salida": "2026-10-18",
+    "regreso": "2026-10-26"
    },
    "corto": {
     "precio": 76.0,
@@ -565,7 +777,7 @@
     "regreso": "2026-11-20"
    },
    "medio": {
-    "precio": 91.0,
+    "precio": 90.0,
     "salida": "2027-01-07",
     "regreso": "2027-01-12"
    },
@@ -585,6 +797,16 @@
     "precio": 159.0,
     "salida": "2026-11-23",
     "regreso": "2026-11-26"
+   },
+   "medio": {
+    "precio": 151.0,
+    "salida": "2026-12-09",
+    "regreso": "2026-12-12"
+   },
+   "largo": {
+    "precio": 151.0,
+    "salida": "2027-02-17",
+    "regreso": "2027-02-21"
    }
   },
   "BCN": {
@@ -594,9 +816,19 @@
     "regreso": "2026-11-02"
    },
    "corto": {
-    "precio": 57.0,
-    "salida": "2026-11-03",
-    "regreso": "2026-11-08"
+    "precio": 61.0,
+    "salida": "2026-11-12",
+    "regreso": "2026-11-16"
+   },
+   "medio": {
+    "precio": 63.0,
+    "salida": "2026-12-28",
+    "regreso": "2026-12-31"
+   },
+   "largo": {
+    "precio": 52.0,
+    "salida": "2027-03-21",
+    "regreso": "2027-03-24"
    }
   },
   "IBZ": {
@@ -609,23 +841,43 @@
     "precio": 36.0,
     "salida": "2026-11-23",
     "regreso": "2026-12-02"
+   },
+   "medio": {
+    "precio": 36.0,
+    "salida": "2026-11-27",
+    "regreso": "2026-12-02"
+   },
+   "largo": {
+    "precio": 39.0,
+    "salida": "2027-02-20",
+    "regreso": "2027-02-24"
    }
   },
   "AMS": {
    "ultimo_minuto": {
-    "precio": 183.0,
+    "precio": 198.0,
     "salida": "2026-10-16",
-    "regreso": "2026-10-24"
+    "regreso": "2026-10-19"
    },
    "corto": {
-    "precio": 168.0,
+    "precio": 173.0,
     "salida": "2026-11-18",
-    "regreso": "2026-11-25"
+    "regreso": "2026-11-21"
+   },
+   "medio": {
+    "precio": 140.0,
+    "salida": "2027-01-12",
+    "regreso": "2027-01-15"
+   },
+   "largo": {
+    "precio": 152.0,
+    "salida": "2027-02-23",
+    "regreso": "2027-02-26"
    }
   },
   "LIS": {
    "ultimo_minuto": {
-    "precio": 59.0,
+    "precio": 58.0,
     "salida": "2026-10-21",
     "regreso": "2026-10-24"
    },
@@ -633,6 +885,16 @@
     "precio": 47.0,
     "salida": "2026-11-21",
     "regreso": "2026-11-30"
+   },
+   "medio": {
+    "precio": 44.0,
+    "salida": "2026-11-28",
+    "regreso": "2026-12-06"
+   },
+   "largo": {
+    "precio": 50.0,
+    "salida": "2027-02-27",
+    "regreso": "2027-03-05"
    }
   },
   "ROM": {
@@ -643,8 +905,18 @@
    },
    "corto": {
     "precio": 52.0,
-    "salida": "2026-11-15",
+    "salida": "2026-11-17",
     "regreso": "2026-11-24"
+   },
+   "medio": {
+    "precio": 38.0,
+    "salida": "2026-12-12",
+    "regreso": "2026-12-21"
+   },
+   "largo": {
+    "precio": 57.0,
+    "salida": "2027-02-20",
+    "regreso": "2027-02-23"
    }
   },
   "BOG": {
@@ -656,7 +928,7 @@
    "corto": {
     "precio": 826.0,
     "salida": "2026-11-17",
-    "regreso": "2026-12-02"
+    "regreso": "2026-12-04"
    },
    "medio": {
     "precio": 801.0,
@@ -677,20 +949,40 @@
    },
    "corto": {
     "precio": 381.0,
-    "salida": "2026-11-09",
-    "regreso": "2026-11-24"
+    "salida": "2026-11-03",
+    "regreso": "2026-11-15"
+   },
+   "medio": {
+    "precio": 428.0,
+    "salida": "2026-11-25",
+    "regreso": "2026-12-07"
+   },
+   "largo": {
+    "precio": 474.0,
+    "salida": "2027-02-17",
+    "regreso": "2027-03-01"
    }
   },
   "MEX": {
    "ultimo_minuto": {
     "precio": 1070.0,
-    "salida": "2026-10-20",
-    "regreso": "2026-11-03"
+    "salida": "2026-10-18",
+    "regreso": "2026-10-30"
    },
    "corto": {
     "precio": 741.0,
     "salida": "2026-11-09",
     "regreso": "2026-11-23"
+   },
+   "medio": {
+    "precio": 629.0,
+    "salida": "2027-01-29",
+    "regreso": "2027-02-10"
+   },
+   "largo": {
+    "precio": 629.0,
+    "salida": "2027-02-18",
+    "regreso": "2027-03-02"
    }
   },
   "NYC": {
@@ -703,6 +995,16 @@
     "precio": 413.0,
     "salida": "2026-11-04",
     "regreso": "2026-11-16"
+   },
+   "medio": {
+    "precio": 268.0,
+    "salida": "2027-02-01",
+    "regreso": "2027-02-13"
+   },
+   "largo": {
+    "precio": 268.0,
+    "salida": "2027-02-22",
+    "regreso": "2027-03-06"
    }
   },
   "DUB": {
@@ -715,6 +1017,16 @@
     "precio": 46.0,
     "salida": "2026-11-18",
     "regreso": "2026-11-21"
+   },
+   "medio": {
+    "precio": 50.0,
+    "salida": "2026-11-29",
+    "regreso": "2026-12-05"
+   },
+   "largo": {
+    "precio": 64.0,
+    "salida": "2027-02-24",
+    "regreso": "2027-03-04"
    }
   },
   "BUD": {
@@ -724,9 +1036,19 @@
     "regreso": "2026-10-30"
    },
    "corto": {
-    "precio": 67.0,
+    "precio": 71.0,
     "salida": "2026-11-17",
     "regreso": "2026-11-26"
+   },
+   "medio": {
+    "precio": 64.0,
+    "salida": "2027-01-12",
+    "regreso": "2027-01-15"
+   },
+   "largo": {
+    "precio": 75.0,
+    "salida": "2027-03-10",
+    "regreso": "2027-03-19"
    }
   },
   "KRK": {
@@ -739,6 +1061,16 @@
     "precio": 84.0,
     "salida": "2026-11-18",
     "regreso": "2026-11-26"
+   },
+   "medio": {
+    "precio": 77.0,
+    "salida": "2027-02-16",
+    "regreso": "2027-02-25"
+   },
+   "largo": {
+    "precio": 71.0,
+    "salida": "2027-02-17",
+    "regreso": "2027-02-25"
    }
   },
   "SPU": {
@@ -748,21 +1080,36 @@
     "regreso": "2026-10-23"
    },
    "corto": {
-    "precio": 160.0,
+    "precio": 147.0,
     "salida": "2026-11-19",
-    "regreso": "2026-11-28"
+    "regreso": "2026-11-22"
+   },
+   "medio": {
+    "precio": 147.0,
+    "salida": "2026-11-28",
+    "regreso": "2026-12-04"
+   },
+   "largo": {
+    "precio": 171.0,
+    "salida": "2027-04-21",
+    "regreso": "2027-04-24"
    }
   },
   "JMK": {
    "ultimo_minuto": {
-    "precio": 273.0,
+    "precio": 265.0,
     "salida": "2026-10-20",
     "regreso": "2026-10-24"
    },
    "corto": {
     "precio": 270.0,
-    "salida": "2026-11-10",
+    "salida": "2026-11-12",
     "regreso": "2026-11-16"
+   },
+   "medio": {
+    "precio": 257.0,
+    "salida": "2026-12-01",
+    "regreso": "2026-12-05"
    }
   },
   "BUH": {
@@ -775,23 +1122,28 @@
     "precio": 59.0,
     "salida": "2026-11-14",
     "regreso": "2026-11-19"
+   },
+   "medio": {
+    "precio": 57.0,
+    "salida": "2026-11-26",
+    "regreso": "2026-12-05"
    }
   },
   "BER-MAD": {
    "ultimo_minuto": {
-    "precio": 251.0,
-    "salida": "2026-10-14",
-    "regreso": "2026-10-20"
+    "precio": 267.0,
+    "salida": "2026-10-24",
+    "regreso": "2026-11-02"
    },
    "corto": {
-    "precio": 77.0,
+    "precio": 83.0,
     "salida": "2026-11-04",
     "regreso": "2026-11-13"
    },
    "medio": {
-    "precio": 73.0,
-    "salida": "2026-12-03",
-    "regreso": "2026-12-10"
+    "precio": 81.0,
+    "salida": "2027-01-12",
+    "regreso": "2027-01-21"
    },
    "largo": {
     "precio": 116.0,
@@ -807,18 +1159,18 @@
    },
    "corto": {
     "precio": 728.0,
-    "salida": "2026-11-24",
+    "salida": "2026-11-16",
     "regreso": "2026-12-08"
    },
    "medio": {
     "precio": 688.0,
     "salida": "2027-02-07",
-    "regreso": "2027-02-19"
+    "regreso": "2027-02-23"
    },
    "largo": {
     "precio": 688.0,
     "salida": "2027-02-17",
-    "regreso": "2027-03-01"
+    "regreso": "2027-03-09"
    }
   }
  }
