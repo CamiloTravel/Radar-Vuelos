@@ -1,5 +1,5 @@
 {
- "ejecuciones": 114,
+ "ejecuciones": 115,
  "alertas_enviadas": {
   "ROM|2027-01-14|2027-01-17": {
    "precio": 57.0,
@@ -135,7 +135,7 @@
   }
  },
  "inicializado": true,
- "ultimo_resumen": "2026-10-09",
+ "ultimo_resumen": "2026-10-10",
  "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {
@@ -146,17 +146,16 @@
   }
  },
  "ultima_ejecucion": {
-  "fecha": "2026-10-10T04:03:07+00:00",
-  "google_ok": 87,
-  "google_fallos": 12,
+  "fecha": "2026-10-10T07:06:24+00:00",
+  "google_ok": 111,
+  "google_fallos": 19,
   "alertas": 0,
-  "calendario_consultas": 239,
+  "calendario_consultas": 461,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
  },
  "radar_obsoletos": {
-  "KRK|2026-10-20|2026-10-29": "2026-10-10T04:03:13.455819+00:00",
   "MEX|2026-10-23|2026-11-08": "2026-10-10T10:03:14.547784+00:00",
   "MEX|2026-10-23|2026-11-12": "2026-10-10T10:03:14.547784+00:00",
   "MEX|2026-10-23|2026-11-14": "2026-10-10T10:03:14.547784+00:00",
