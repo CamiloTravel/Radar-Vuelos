@@ -1,5 +1,5 @@
 {
- "ejecuciones": 217,
+ "ejecuciones": 218,
  "alertas_enviadas": {
   "ROM|2027-01-14|2027-01-17": {
    "precio": 57.0,
@@ -336,21 +336,54 @@
  },
  "inicializado": true,
  "ultimo_resumen": "2026-10-22",
- "cola_silencio": [],
+ "cola_silencio": [
+  {
+   "tipo": "objetivo",
+   "clave": "BOG-MAD",
+   "nombre": "Madrid",
+   "perfil": "largo",
+   "ventana": "largo",
+   "ventana_nombre": "Largo plazo",
+   "salida": "2027-04-08",
+   "regreso": "2027-04-20",
+   "precio": 696.0,
+   "normal": null,
+   "caida": null,
+   "puntuacion": null,
+   "aerolineas": [
+    "Avianca"
+   ],
+   "preferida": false,
+   "escalas": 1,
+   "vuelo": {
+    "sale": "20:00 BOG",
+    "llega": "15:20 MAD (+1)",
+    "via": [
+     "CLO"
+    ]
+   },
+   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDQtMDhggApqBRIDQk9HcgUSA01BRBodEgoyMDI3LTA0LTIwYIAKagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR",
+   "nota": "Tu objetivo era 750 €",
+   "aeropuerto": "MAD",
+   "origen_aeropuerto": "BOG",
+   "ruta_txt": "Bogotá → Madrid",
+   "objetivo": 750.0,
+   "en_cola_desde": "2026-10-23T04:03:15+00:00"
+  }
+ ],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-10-23T01:07:00+00:00",
-  "google_ok": 126,
-  "google_fallos": 24,
+  "fecha": "2026-10-23T04:03:15+00:00",
+  "google_ok": 87,
+  "google_fallos": 12,
   "alertas": 0,
-  "calendario_consultas": 572,
+  "calendario_consultas": 239,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
  },
  "radar_obsoletos": {
-  "BER|2026-11-04|2026-11-12": "2026-10-23T01:07:19.084643+00:00",
   "IBZ|2026-10-25|2026-10-29": "2026-10-23T07:06:50.655703+00:00",
   "AMS|2026-11-05|2026-11-08": "2026-10-23T07:06:50.655703+00:00",
   "IBZ|2026-11-23|2026-12-02": "2026-10-23T07:06:50.655703+00:00",
