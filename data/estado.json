@@ -1,5 +1,5 @@
 {
- "ejecuciones": 218,
+ "ejecuciones": 219,
  "alertas_enviadas": {
   "ROM|2027-01-14|2027-01-17": {
    "precio": 57.0,
@@ -332,53 +332,23 @@
   "BOG-MAD|2027-02-08|2027-02-22": {
    "precio": 729.0,
    "fecha": "2026-10-22T19:06:50+00:00"
+  },
+  "BOG-MAD|2027-04-08|2027-04-20": {
+   "precio": 696.0,
+   "fecha": "2026-10-23T07:06:27+00:00"
   }
  },
  "inicializado": true,
- "ultimo_resumen": "2026-10-22",
- "cola_silencio": [
-  {
-   "tipo": "objetivo",
-   "clave": "BOG-MAD",
-   "nombre": "Madrid",
-   "perfil": "largo",
-   "ventana": "largo",
-   "ventana_nombre": "Largo plazo",
-   "salida": "2027-04-08",
-   "regreso": "2027-04-20",
-   "precio": 696.0,
-   "normal": null,
-   "caida": null,
-   "puntuacion": null,
-   "aerolineas": [
-    "Avianca"
-   ],
-   "preferida": false,
-   "escalas": 1,
-   "vuelo": {
-    "sale": "20:00 BOG",
-    "llega": "15:20 MAD (+1)",
-    "via": [
-     "CLO"
-    ]
-   },
-   "url": "https://www.google.com/travel/flights/search?tfs=Gh0SCjIwMjctMDQtMDhggApqBRIDQk9HcgUSA01BRBodEgoyMDI3LTA0LTIwYIAKagUSA01BRHIFEgNCT0dCAQFIAWoEEAEYAYgBAZgBAQ==&hl=es&curr=EUR",
-   "nota": "Tu objetivo era 750 €",
-   "aeropuerto": "MAD",
-   "origen_aeropuerto": "BOG",
-   "ruta_txt": "Bogotá → Madrid",
-   "objetivo": 750.0,
-   "en_cola_desde": "2026-10-23T04:03:15+00:00"
-  }
- ],
+ "ultimo_resumen": "2026-10-23",
+ "cola_silencio": [],
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-10-23T04:03:15+00:00",
-  "google_ok": 87,
-  "google_fallos": 12,
+  "fecha": "2026-10-23T07:06:27+00:00",
+  "google_ok": 118,
+  "google_fallos": 22,
   "alertas": 0,
-  "calendario_consultas": 239,
+  "calendario_consultas": 461,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
@@ -424,7 +394,18 @@
   "MIA|2026-11-17|2026-11-29": "2026-10-23T13:07:00.500650+00:00",
   "MIA|2027-01-13|2027-01-25": "2026-10-23T13:07:00.500650+00:00",
   "MUC|2026-12-14|2026-12-17": "2026-10-23T13:07:00.500650+00:00",
-  "BUD|2027-01-13|2027-01-16": "2026-10-23T13:07:00.500650+00:00"
+  "BUD|2027-01-13|2027-01-16": "2026-10-23T13:07:00.500650+00:00",
+  "BOG|2026-11-02|2026-11-14": "2026-10-23T19:06:27.387293+00:00",
+  "BOG|2026-11-02|2026-11-18": "2026-10-23T19:06:27.387293+00:00",
+  "BER-MAD|2027-04-09|2027-04-13": "2026-10-23T19:06:27.387293+00:00",
+  "IBZ|2026-12-12|2026-12-15": "2026-10-23T19:06:27.387293+00:00",
+  "BUD|2026-10-26|2026-11-01": "2026-10-23T19:06:27.387293+00:00",
+  "BUD|2026-11-04|2026-11-13": "2026-10-23T19:06:27.387293+00:00",
+  "KRK|2026-11-05|2026-11-14": "2026-10-23T19:06:27.387293+00:00",
+  "SPU|2026-10-31|2026-11-08": "2026-10-23T19:06:27.387293+00:00",
+  "JMK|2026-11-04|2026-11-10": "2026-10-23T19:06:27.387293+00:00",
+  "NYC|2026-11-12|2026-11-24": "2026-10-23T19:06:27.387293+00:00",
+  "KRK|2026-11-18|2026-11-26": "2026-10-23T19:06:27.387293+00:00"
  },
  "calendario_presupuesto": 150,
  "ultimo_aviso_objetivo": {
