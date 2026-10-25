@@ -1,5 +1,5 @@
 {
- "ejecuciones": 232,
+ "ejecuciones": 233,
  "alertas_enviadas": {
   "ROM|2027-01-14|2027-01-17": {
    "precio": 57.0,
@@ -352,21 +352,19 @@
  "v2_avisado": true,
  "ultimo_aviso_ruta": {},
  "ultima_ejecucion": {
-  "fecha": "2026-10-24T22:03:13+00:00",
-  "google_ok": 86,
-  "google_fallos": 12,
+  "fecha": "2026-10-25T02:07:05+00:00",
+  "google_ok": 126,
+  "google_fallos": 24,
   "alertas": 0,
-  "calendario_consultas": 239,
+  "calendario_consultas": 572,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
  },
  "radar_obsoletos": {
-  "BOG-MAD|2027-03-03|2027-03-15": "2026-10-25T01:07:13.575309+00:00",
-  "BOG-MAD|2027-03-04|2027-03-16": "2026-10-25T01:07:13.575309+00:00",
-  "MUC|2026-11-06|2026-11-11": "2026-10-25T01:07:13.575309+00:00",
-  "IBZ|2026-10-27|2026-10-31": "2026-10-25T01:07:13.575309+00:00",
-  "IBZ|2026-10-29|2026-11-01": "2026-10-25T01:07:13.575309+00:00"
+  "MUC|2026-11-26|2026-12-04": "2026-10-25T14:07:05.642314+00:00",
+  "IBZ|2026-12-12|2026-12-15": "2026-10-25T14:07:05.642314+00:00",
+  "AMS|2027-03-06|2027-03-09": "2026-10-25T14:07:05.642314+00:00"
  },
  "calendario_presupuesto": 150,
  "ultimo_aviso_objetivo": {}
