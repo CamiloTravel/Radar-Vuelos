@@ -1,5 +1,5 @@
 {
- "ejecuciones": 341,
+ "ejecuciones": 342,
  "alertas_enviadas": {
   "ROM|2027-01-14|2027-01-17": {
    "precio": 57.0,
@@ -400,19 +400,29 @@
   "BOG-MAD|2027-04-11|2027-04-23": {
    "precio": 718.0,
    "fecha": "2026-11-07T14:06:44+00:00"
+  },
+  "X-SCQ|2027-01-28|2027-02-04": {
+   "precio": 45.0,
+   "fecha": "2026-11-07T20:05:58+00:00"
   }
  },
  "inicializado": true,
  "ultimo_resumen": "2026-11-07",
  "cola_silencio": [],
  "v2_avisado": true,
- "ultimo_aviso_ruta": {},
+ "ultimo_aviso_ruta": {
+  "X-SCQ": {
+   "precio": 45.0,
+   "fecha": "2026-11-07T20:05:58+00:00",
+   "tipo": "error_fare"
+  }
+ },
  "ultima_ejecucion": {
-  "fecha": "2026-11-07T17:03:15+00:00",
-  "google_ok": 93,
-  "google_fallos": 13,
-  "alertas": 0,
-  "calendario_consultas": 239,
+  "fecha": "2026-11-07T20:05:58+00:00",
+  "google_ok": 113,
+  "google_fallos": 22,
+  "alertas": 1,
+  "calendario_consultas": 461,
   "calendario_fallos": 0,
   "calendario_rutas": 19,
   "calendario_presupuesto": 150
@@ -644,7 +654,10 @@
   "ROM|2026-11-14|2026-11-17": "2026-11-08T05:03:15.108967+00:00",
   "MEX|2026-11-21|2026-12-09": "2026-11-08T05:03:15.108967+00:00",
   "IBZ|2026-12-16|2026-12-25": "2026-11-08T05:03:15.108967+00:00",
-  "BUD|2026-11-18|2026-11-21": "2026-11-08T05:03:15.108967+00:00"
+  "BUD|2026-11-18|2026-11-21": "2026-11-08T05:03:15.108967+00:00",
+  "BOG|2026-11-24|2026-12-06": "2026-11-08T08:05:58.357435+00:00",
+  "MEX|2027-01-22|2027-02-07": "2026-11-08T08:05:58.357435+00:00",
+  "JMK|2026-11-20|2026-11-29": "2026-11-08T08:05:58.357435+00:00"
  },
  "calendario_presupuesto": 150,
  "ultimo_aviso_objetivo": {
